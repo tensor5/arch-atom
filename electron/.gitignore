@@ -1,0 +1,12 @@
+boto/
+breakpad/
+brightray/
+crashpad/
+electron/
+google-breakpad/
+gyp/
+libchromiumcontent/
+native_mate/
+node/
+requests/
+chromium-*.tar.xz

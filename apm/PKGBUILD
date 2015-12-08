@@ -1,0 +1,78 @@
+# Maintainer: Nicola Squartini <tensor5@gmail.com>
+
+pkgname=nodejs-atom-package-manager
+pkgver=1.5.0
+pkgrel=1
+pkgdesc='Atom package manager'
+arch=('i686' 'x86_64')
+url='https://github.com/atom/apm'
+license=('MIT')
+groups=('atom')
+depends=('libgnome-keyring' 'nodejs' 'python2')
+makedepends=('npm')
+options=(!emptydirs)
+source=('electron-version.patch'
+        'use-system-nodejs.patch')
+sha256sums=('8313a8079144583a9d07d02cf904ffa687fc2c906ae986346ff93bcb33d5e940'
+            '66dfc84b5cd76dd02ef6cf04d532cdb2ff6a6eaa4d94bf47ab5ed81d9e13326c')
+
+prepare() {
+  rm -rf "${srcdir}"/apm-build
+}
+
+build() {
+  npm install --user root -g \
+      --prefix="${srcdir}"/apm-build/usr atom-package-manager@${pkgver}
+}
+
+package() {
+  cp -r "${srcdir}"/apm-build/usr "${pkgdir}"
+
+  cd "${pkgdir}"/usr/lib/node_modules/atom-package-manager
+  patch -Np1 -i ${srcdir}/electron-version.patch
+  patch -Np1 -i ${srcdir}/use-system-nodejs.patch
+  rm bin/{apm.cmd,node}
+  sed -e '/"install": "node .\/script\/download-node.js",/d' -i package.json
+
+  # Fix location of Atom app
+  sed -e 's|share/atom/resources/app.asar|lib/atom|g' \
+      -i "${pkgdir}"/usr/lib/node_modules/atom-package-manager/lib/apm.js
+
+  # Install license file
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  ln -s ../../../lib/node_modules/atom-package-manager/LICENSE.md \
+     "${pkgdir}/usr/share/licenses/${pkgname}"
+
+  # Remove occurences of ${srcdir}
+  find "${pkgdir}" -name "package.json" \
+       -exec sed -e "s|${srcdir}/apm-build||" -i '{}' \;
+
+  # Remove useless stuff and use python2
+  find "${pkgdir}"/usr/lib \
+      -name ".*" -prune -exec rm -r '{}' \; \
+      -or -name "*.a" -exec rm '{}' \; \
+      -or -name "*.bat" -exec rm '{}' \; \
+      -or -name "*.mk" -exec rm '{}' \; \
+      -or -path "*/git-utils/binding.gyp" -exec rm '{}' \; \
+      -or -path "*/git-utils/src" -prune -exec rm -r '{}' \; \
+      -or -path "*/keytar/binding.gyp" -exec rm '{}' \; \
+      -or -path "*/keytar/src" -prune -exec rm -r '{}' \; \
+      -or -path "*/oniguruma/binding.gyp" -exec rm '{}' \; \
+      -or -path "*/oniguruma/src" -prune -exec rm -r '{}' \; \
+      -or -name "benchmark" -prune -exec rm -r '{}' \; \
+      -or -name "binding.Makefile" -exec rm '{}' \; \
+      -or -name "config.gypi" -exec rm '{}' \; \
+      -or -name "deps" -prune -exec rm -r '{}' \; \
+      -or -name "doc" -prune -exec rm -r '{}' \; \
+      -or -name "html" -prune -exec rm -r '{}' \; \
+      -or -name "Makefile" -exec rm '{}' \; \
+      -or -name "man" -prune -exec rm -r '{}' \; \
+      -or -name "obj.target" -prune -exec rm -r '{}' \; \
+      -or -name "samples" -prune -exec rm -r '{}' \; \
+      -or -name "test" -prune -exec rm -r '{}' \; \
+      -or -name "tests" -prune -exec rm -r '{}' \; \
+      -or -name "*.py" -exec \
+          sed -e 's|^#!/usr/bin/env python$|#!/usr/bin/python2|' -i '{}' \; \
+      -or -path "*/gyp/gyp" \
+          -exec sed -e 's|exec python |exec python2 |' -i '{}' \;
+}

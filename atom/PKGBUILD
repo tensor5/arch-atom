@@ -1,0 +1,104 @@
+# Maintainer: Nicola Squartini <tensor5@gmail.com>
+
+pkgname=atom
+pkgver=1.2.4
+pkgrel=1
+pkgdesc='A hackable text editor for the 21st Century'
+arch=('i686' 'x86_64')
+url='https://github.com/atom/atom'
+license=('MIT' 'custom')
+depends=('desktop-file-utils'
+         'electron'
+         'nodejs-atom-package-manager')
+makedepends=('npm')
+conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
+install='atom.install'
+source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
+        'fix-atom-sh.patch'
+        'fix-license-path.patch'
+        'use-system-apm.patch'
+        'use-system-electron.patch')
+sha256sums=('687277535f4ad0bc9e629fbddbb9563f786fb37bc5e0b5767dd19c17215bb8b6'
+            'bc952fd8825ee140ad150c1d5827bab6efc0b8bbbf4f71f6b819f027abc63b50'
+            'd34595fd475ef00326d64db46c2cd848d7fc1ece35b5016deb486674f5b965d2'
+            'a019423ee87c34e582f904cd0f822f4c74bbb5cc0632e24cae4094924b1e9716'
+            '8a99dffe95a88c095128843d803b4b31e3c209405ffd06f89c76184afa32df70')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  patch -Np1 -i "${srcdir}"/fix-atom-sh.patch
+  patch -Np1 -i "${srcdir}"/use-system-electron.patch
+  patch -Np1 -i "${srcdir}"/use-system-apm.patch
+  patch -Np1 -i "${srcdir}"/fix-license-path.patch
+
+  # apm with system (updated) nodejs cannot 'require' modules inside asar
+  sed -e "s/, 'generate-asar'//" -i build/Gruntfile.coffee
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  export ATOM_RESOURCE_PATH="$srcdir/atom-$pkgver"
+  apm clean
+  apm install
+  _packagesToDedupe=('abbrev'
+                     'amdefine'
+                     'atom-space-pen-views'
+                     'cheerio'
+                     'domelementtype'
+                     'fs-plus'
+                     'grim'
+                     'highlights'
+                     'humanize-plus'
+                     'iconv-lite'
+                     'inherits'
+                     'loophole'
+                     'oniguruma'
+                     'q'
+                     'request'
+                     'rimraf'
+                     'roaster'
+                     'season'
+                     'sigmund'
+                     'semver'
+                     'through'
+                     'temp')
+  apm dedupe ${_packagesToDedupe[@]}
+  cd build
+  npm install
+  cd ..
+  script/grunt --build-dir="${srcdir}/atom-build" --channel=stable
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -d -m 755 "${pkgdir}"/usr/lib
+  cp -r "${srcdir}"/atom-build/Atom/resources/app "${pkgdir}"/usr/lib
+  mv "${pkgdir}"/usr/lib/app "${pkgdir}"/usr/lib/atom
+
+  install -d -m 755 "${pkgdir}/usr/share/applications"
+  sed -e "s|<%= appName %>|Atom|" \
+      -e "s/<%= description %>/${pkgdesc}/" \
+      -e "s|<%= installDir %>/share/<%= appFileName %>/atom|/usr/lib/electron/electron --app=/usr/lib/atom|" \
+      -e "s|<%= iconPath %>|/usr/lib/atom/resources/atom.png|" \
+      resources/linux/atom.desktop.in > "${pkgdir}/usr/share/applications/atom.desktop"
+
+  install -D -m 755 "${srcdir}"/atom-build/Atom/resources/new-app/atom.sh \
+          "${pkgdir}/usr/bin/atom"
+
+  install -D -m 755 "${srcdir}"/atom-build/Atom/resources/LICENSE.md \
+          "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.md"
+
+  # Remove useless stuff
+  find "${pkgdir}"/usr/lib/atom/node_modules \
+      -name "*.a" -exec rm '{}' \; \
+      -or -name "*.bat" -exec rm '{}' \; \
+      -or -name "benchmark" -prune -exec rm -r '{}' \; \
+      -or -name "doc" -prune -exec rm -r '{}' \; \
+      -or -name "html" -prune -exec rm -r '{}' \; \
+      -or -name "man" -prune -exec rm -r '{}' \; \
+      -or -path "*/less/gradle" -prune -exec rm -r '{}' \; \
+      -or -path "*/task-lists/src" -prune -exec rm -r '{}' \;
+}

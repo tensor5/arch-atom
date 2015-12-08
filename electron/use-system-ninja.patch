@@ -1,0 +1,13 @@
+diff --git a/script/build.py b/script/build.py
+index c428b95..c5c9f46 100755
+--- a/script/build.py
++++ b/script/build.py
+@@ -15,7 +15,7 @@ SOURCE_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+ def main():
+   os.chdir(SOURCE_ROOT)
+ 
+-  ninja = os.path.join('vendor', 'depot_tools', 'ninja')
++  ninja = 'ninja'
+   if sys.platform == 'win32':
+     ninja += '.exe'
+ 
