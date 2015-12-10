@@ -77,6 +77,8 @@ prepare() {
     git config submodule.vendor/${m}.url ${srcdir}/${m}
   done
   git submodule update
+  # Unused shared library
+  sed -e "/-lcups/d" -i brightray.gyp
 
   if [ ${_rebuildcc} -ne 0 ]; then
     cd ${srcdir}/libchromiumcontent
