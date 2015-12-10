@@ -1,7 +1,7 @@
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -282,7 +282,7 @@ module.exports = (grunt) ->
-   ciTasks.push('publish-build') unless process.env.TRAVIS
+@@ -295,7 +295,7 @@
+   ciTasks.push('publish-build') unless process.env.CI
    grunt.registerTask('ci', ciTasks)
  
 -  defaultTasks = ['download-electron', 'download-electron-chromedriver', 'build', 'set-version', 'generate-asar']
@@ -11,7 +11,7 @@
    grunt.registerTask('default', defaultTasks)
 --- a/build/tasks/build-task.coffee
 +++ b/build/tasks/build-task.coffee
-@@ -14,19 +14,6 @@ module.exports = (grunt) ->
+@@ -14,19 +14,6 @@
      rm path.join(buildDir, 'installer')
      mkdir path.dirname(buildDir)
  
@@ -37,13 +37,13 @@
      "url": "https://github.com/atom/atom/issues"
    },
    "license": "MIT",
--  "electronVersion": "0.34.0",
+-  "electronVersion": "0.34.3",
    "dependencies": {
      "async": "0.2.6",
-     "atom-keymap": "^6.1.0",
+     "atom-keymap": "^6.1.1",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
-@@ -194,7 +194,7 @@ resolveModulePath = (relativePath, parentModule) ->
+@@ -194,7 +194,7 @@
    return
  
  registerBuiltins = (devMode) ->
@@ -54,7 +54,7 @@
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -488,7 +488,7 @@ class PackageManager
+@@ -490,7 +490,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
@@ -65,7 +65,7 @@
      packagePath?.startsWith(@resourcePathWithTrailingSlash)
 --- a/static/index.js
 +++ b/static/index.js
-@@ -23,7 +23,7 @@
+@@ -28,7 +28,7 @@
          throw loadSettingsError
        }
  
