@@ -40,6 +40,8 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   export ATOM_RESOURCE_PATH="$srcdir/atom-$pkgver"
+  # If unset, ~/.atom/.node-gyp/.atom/.npm is used
+  export NPM_CONFIG_CACHE="${HOME}/.atom/.npm"
   apm clean
   apm install
   _packagesToDedupe=('abbrev'
