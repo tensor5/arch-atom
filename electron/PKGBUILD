@@ -1,6 +1,5 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_ccver=45.0.2454.85-atom-2
 _chromiumver=45.0.2454.85
 _rebuildcc=0  # 0: don't rebuild libchromiumcontent
 pkgname=electron
@@ -18,7 +17,7 @@ source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
         'breakpad::git+https://github.com/atom/chromium-breakpad.git'
         'git+https://github.com/atom/crashpad.git'
         'git+https://github.com/svn2github/gyp.git'
-        "git+https://github.com/atom/libchromiumcontent.git#tag=v${_ccver}"
+        "git+https://github.com/atom/libchromiumcontent.git"
         'native_mate::git+https://github.com/zcbenz/native-mate.git'
         'git+https://github.com/atom/node.git'
         'git+https://github.com/kennethreitz/requests.git'
@@ -82,6 +81,8 @@ prepare() {
 
   if [ ${_rebuildcc} -ne 0 ]; then
     cd ${srcdir}/libchromiumcontent
+    _cc_commit=$(grep LIBCHROMIUMCONTENT_COMMIT ../electron/script/lib/config.py |awk 'BEGIN { FS = "=" } ; { print $2 }')
+    git checkout ${_cc_commit:2:40}
     git submodule update --init vendor/python-patch
     patch -Np1 -i "${srcdir}"/749363e2c1135bb7f5996f0803ad61db1c8c3925.patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
