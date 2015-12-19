@@ -149,7 +149,7 @@ build() {
     script/create-dist --target_arch=${_target} --component=static_library
     # Necessary for electron build scripts
     mkdir dist/main/shared_library
-    # Save space and time
+    echo 'Stripping static libraries (saves space and linking time)...'
     find dist/main/static_library -name *.a -exec strip --strip-debug '{}' \;
   fi
 
