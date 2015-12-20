@@ -1,10 +1,10 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=45.0.2454.85
-_rebuildcc=0  # 0: don't rebuild libchromiumcontent
+_chromiumver=47.0.2526.73
+_rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.35.4
-pkgrel=2
+pkgver=0.36.1
+pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
@@ -27,7 +27,6 @@ source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
         "https://github.com/zcbenz/chromium-source-tarball/releases/download/${_chromiumver}/chromium-${_chromiumver}.tar.xz"
         'use-system-clang.patch'
         'use-system-ninja.patch'
-        '749363e2c1135bb7f5996f0803ad61db1c8c3925.patch'
         'libchromiumcontent-dont-create-zip.patch'
         'libchromiumcontent-use-system-tools.patch')
 noextract=("chromium-${_chromiumver}.tar.xz")
@@ -42,11 +41,10 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '49cae8a6883943302b4310c7bb9c93803443580c8c959d2f8de3eca28b73dcbd'
+            '637b7fb47fb8cc5a2b25eba26aa4c12499f98482c83bf8f2aa92a4a7e13d4acc'
             '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
-            '3c5eb883adbb9b50ccb720eefe42f4a7e93389986b29a022e8ec47197a7e45c9'
-            '17e0b6eea4f9e22572324404d67a075e7c65361811cf5307a3ee63031c998426'
+            'cd8b6634fc125ebc91ee2e4efb30ffd2ecf640eb1d785178e20e3c2864dd2773'
             '0ff3e3061baa0d0df5833da26216fe9ff7b5081d2671b094fe292fc7e85eb995')
 
 prepare() {
@@ -88,7 +86,6 @@ prepare() {
     _cc_commit=$(grep LIBCHROMIUMCONTENT_COMMIT ../electron/script/lib/config.py |awk 'BEGIN { FS = "=" } ; { print $2 }')
     git checkout ${_cc_commit:2:40}
     git submodule update --init vendor/python-patch
-    patch -Np1 -i "${srcdir}"/749363e2c1135bb7f5996f0803ad61db1c8c3925.patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-dont-create-zip.patch
     cd ${srcdir}/libchromiumcontent/vendor/chromium
@@ -98,6 +95,8 @@ prepare() {
     if [ ! -e src/.version ]; then
       echo "${_chromiumver}" > src/.version
     fi
+    sed -e "/Wno-bitfield-width/d" -e "/detect-odr-violations/d" \
+        -i src/build/common.gypi
   fi
 }
 
@@ -143,8 +142,6 @@ build() {
       export CC='clang -Qunused-arguments'
       export CXX='clang++ -Qunused-arguments'
       script/update --target_arch=${_target}
-      sed -e "s|_POSIX_SOURCE|_POSIX_C_SOURCE 200112L|" -i \
-          vendor/chromium/src/third_party/boringssl/src/crypto/bio/socket_helper.c
       script/build --target_arch=${_target} --component=static_library
     )
     script/create-dist --target_arch=${_target} --component=static_library
