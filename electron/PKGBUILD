@@ -182,4 +182,19 @@ package() {
   cp -r locales resources ${pkgdir}/usr/lib/electron
 
   echo -n "v${pkgver}" > ${pkgdir}/usr/lib/electron/version
+
+  # Install Node headers
+  _headers_dest="${pkgdir}/usr/lib/electron/node"
+  install -d -m755 "${_headers_dest}"
+  cd "${srcdir}"/electron/vendor/node
+  find src deps/http_parser deps/zlib deps/uv deps/npm \
+    -name "*.gypi" \
+      -exec install -D -m644 '{}' "${_headers_dest}/{}" \; \
+    -or -name "*.h" \
+      -exec install -D -m644 '{}' "${_headers_dest}/{}" \;
+  install -m644 {common,config}.gypi "${_headers_dest}"
+  cd "${srcdir}"/libchromiumcontent/dist/main/src
+  find v8 -name "*.h" \
+    -exec install -D -m644 '{}' "${_headers_dest}/deps/{}" \;
+  # echo '9' > "${_headers_dest}/installVersion"
 }
