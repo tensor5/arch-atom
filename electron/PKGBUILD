@@ -83,7 +83,7 @@ prepare() {
 
   if [ ${_rebuildcc} -ne 0 ]; then
     cd ${srcdir}/libchromiumcontent
-    _cc_commit=$(grep LIBCHROMIUMCONTENT_COMMIT ../electron/script/lib/config.py |awk 'BEGIN { FS = "=" } ; { print $2 }')
+    _cc_commit=$(grep LIBCHROMIUMCONTENT_COMMIT ../electron/script/lib/config.py | awk 'BEGIN { FS = "=" } ; { print $2 }')
     git checkout ${_cc_commit:2:40}
     git submodule update --init vendor/python-patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
