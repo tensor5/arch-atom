@@ -1,10 +1,10 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 _chromiumver=47.0.2526.73
-_rebuildcc=0  # 0: don't rebuild libchromiumcontent
+_rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
 pkgver=0.36.2
-pkgrel=2
+pkgrel=3
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
