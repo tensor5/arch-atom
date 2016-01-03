@@ -1,0 +1,12 @@
+--- a/chromiumcontent/chromiumcontent.gyp
++++ b/chromiumcontent/chromiumcontent.gyp
+@@ -44,6 +44,9 @@
+       'sources': [
+         'empty.cc',
+       ],
++      'ldflags!': [
++        '-Wl,--fatal-warnings',
++      ],
+       'conditions': [
+         ['OS=="win"', {
+           'dependencies': [

@@ -9,8 +9,8 @@ pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
-depends=('alsa-lib' 'flac' 'gconf' 'gtk2' 'icu' 'libnotify' 'libvpx' 'libwebp'
-         'libxslt' 'libxtst' 'minizip' 'nss' 're2' 'snappy')
+depends=('ffmpeg' 'gconf' 'gtk2' 'icu' 'libevent' 'libnotify' 'libvpx' 'libxslt'
+         'minizip' 'nss' 're2' 'snappy')
 makedepends=('clang' 'git' 'harfbuzz-icu' 'jsoncpp' 'libexif' 'ninja' 'npm'
              'python2' 'yasm')
 source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
@@ -31,7 +31,9 @@ source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
         'libchromiumcontent-dont-create-zip.patch'
         'libchromiumcontent-use-system-tools.patch'
         'unbundle-libvpx_new-fix.patch'
-        'issue1414393011_1.diff')
+        'issue1414393011_1.diff'
+        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r0.patch'
+        'libchromiumcontent-no-fatal-warnings.patch')
 noextract=("chromium-${_chromiumver}.tar.xz")
 sha256sums=('SKIP'
             'SKIP'
@@ -51,7 +53,9 @@ sha256sums=('SKIP'
             'cd8b6634fc125ebc91ee2e4efb30ffd2ecf640eb1d785178e20e3c2864dd2773'
             '0ff3e3061baa0d0df5833da26216fe9ff7b5081d2671b094fe292fc7e85eb995'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
-            'c7dd15464752d31ff63bf4513ea0eef3bcd088e33a10789dd211a058e0dfae1b')
+            'c7dd15464752d31ff63bf4513ea0eef3bcd088e33a10789dd211a058e0dfae1b'
+            '32f65bb6d1a70eea8c0536e7d9aebf8f09cb161d2dd0cda8ace52ae0e417761d'
+            'b56ec0d85a4a8fe2543095add9de6c7d8c413e5cf78cf3b40c292daf057a6f52')
 
 prepare() {
   cd ${srcdir}/electron
@@ -85,7 +89,7 @@ prepare() {
   git submodule update
   # Remove unused shared library and add extra libraries for unbundling
   sed -e "/-lcups/d" \
-      -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l flac harfbuzz-icu icu-i18n jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
+      -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu icu-i18n jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
       -i brightray.gyp
 
   if [ ${_rebuildcc} -ne 0 ]; then
@@ -95,6 +99,8 @@ prepare() {
     git submodule update --init vendor/python-patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-dont-create-zip.patch
+    patch -Np1 -i "${srcdir}"/libchromiumcontent-no-fatal-warnings.patch  # Use system ffmpeg
+    rm patches/third_party/ffmpeg/ffmpeg.patch  # Use system ffmpeg
     sed -e "/icudtl.dat/d" -i script/create-dist  # Use system icu
     _chromium_flags=('clang=1'
                      'clang_use_chrome_plugins=0'
@@ -102,11 +108,12 @@ prepare() {
                      'icu_use_data_file_flag=0'
                      'remove_webcore_debug_symbols=1'
                      'use_system_expat=1'
-                     'use_system_ffmpeg=0'
+                     'use_system_ffmpeg=1'
                      'use_system_flac=1'
                      'use_system_harfbuzz=1'
                      'use_system_icu=1'
                      'use_system_jsoncpp=1'
+                     'use_system_libevent=1'
                      'use_system_libjpeg=1'
                      'use_system_libpng=1'
                      'use_system_libvpx=1'
@@ -133,6 +140,7 @@ prepare() {
     sed -e "/Wno-bitfield-width/d" -e "/detect-odr-violations/d" \
         -i src/build/common.gypi
     cd src
+    patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r0.patch  # Use system ffmpeg
     find third_party/icu -type f \! -regex '.*\.\(gyp\|gypi\|isolate\)' -delete  # Use system icu
     patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
     patch -Np1 -i ${srcdir}/issue1414393011_1.diff  # Use system zlib
