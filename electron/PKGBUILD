@@ -173,7 +173,7 @@ build() {
   echo 'Building electron...'
   cd ${srcdir}/electron
   _cc=${srcdir}/libchromiumcontent/dist/main
-  script/bootstrap.py -v --target_arch=${_target} \
+  script/bootstrap.py --target_arch=${_target} \
                       --libcc_source_path=${_cc}/src \
                       --libcc_shared_library_path=${_cc}/shared_library \
                       --libcc_static_library_path=${_cc}/static_library
