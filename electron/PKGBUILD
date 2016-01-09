@@ -3,8 +3,8 @@
 _chromiumver=47.0.2526.73
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.36.2
-pkgrel=3
+pkgver=0.36.3
+pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
@@ -49,13 +49,13 @@ sha256sums=('SKIP'
             '637b7fb47fb8cc5a2b25eba26aa4c12499f98482c83bf8f2aa92a4a7e13d4acc'
             '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
-            '08f572a178ab8fbac9bdc16f48190685686ac0c335cc866422c2d5fc63bda35e'
-            'cd8b6634fc125ebc91ee2e4efb30ffd2ecf640eb1d785178e20e3c2864dd2773'
+            '32c33764c179ccbc766b87fd0a0b2e1936fc4a88a7a727270e61cf3a19f1ac6d'
+            '14d18da908aeb78b1dd39b707e7e34ec34a4a23f29f3acbc4b57288e35ec1d06'
             '0ff3e3061baa0d0df5833da26216fe9ff7b5081d2671b094fe292fc7e85eb995'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
             'c7dd15464752d31ff63bf4513ea0eef3bcd088e33a10789dd211a058e0dfae1b'
             '32f65bb6d1a70eea8c0536e7d9aebf8f09cb161d2dd0cda8ace52ae0e417761d'
-            'b56ec0d85a4a8fe2543095add9de6c7d8c413e5cf78cf3b40c292daf057a6f52')
+            '6c0b74971fd2ba8ba071e98e66c4233e990974b944b41de1708076e61f7fff2e')
 
 prepare() {
   cd ${srcdir}/electron

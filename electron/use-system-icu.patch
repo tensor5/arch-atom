@@ -1,6 +1,19 @@
-diff -Naur electron-0.36.2/atom/renderer/api/atom_api_spell_check_client.cc electron-0.36.2.new/atom/renderer/api/atom_api_spell_check_client.cc
---- electron-0.36.2/atom/renderer/api/atom_api_spell_check_client.cc	2015-12-25 14:45:07.000000000 +0900
-+++ electron-0.36.2.new/atom/renderer/api/atom_api_spell_check_client.cc	2015-12-27 10:00:36.137646551 +0900
+diff --git a/atom.gyp b/atom.gyp
+index eb4302d..3d3e161 100644
+--- a/atom.gyp
++++ b/atom.gyp
+@@ -201,7 +201,6 @@
+               'files': [
+                 '<@(copied_libraries)',
+                 '<(libchromiumcontent_dir)/locales',
+-                '<(libchromiumcontent_dir)/icudtl.dat',
+                 '<(libchromiumcontent_dir)/content_shell.pak',
+                 '<(libchromiumcontent_dir)/natives_blob.bin',
+                 '<(libchromiumcontent_dir)/snapshot_blob.bin',
+diff --git a/atom/renderer/api/atom_api_spell_check_client.cc b/atom/renderer/api/atom_api_spell_check_client.cc
+index 25d1e30..0657766 100644
+--- a/atom/renderer/api/atom_api_spell_check_client.cc
++++ b/atom/renderer/api/atom_api_spell_check_client.cc
 @@ -11,7 +11,7 @@
  #include "base/logging.h"
  #include "native_mate/converter.h"
@@ -10,20 +23,10 @@ diff -Naur electron-0.36.2/atom/renderer/api/atom_api_spell_check_client.cc elec
  #include "third_party/WebKit/public/web/WebTextCheckingCompletion.h"
  #include "third_party/WebKit/public/web/WebTextCheckingResult.h"
  
-diff -Naur electron-0.36.2/atom.gyp electron-0.36.2.new/atom.gyp
---- electron-0.36.2/atom.gyp	2015-12-25 14:45:07.000000000 +0900
-+++ electron-0.36.2.new/atom.gyp	2015-12-27 10:19:37.200197784 +0900
-@@ -203,7 +203,6 @@
-               'destination': '<(PRODUCT_DIR)',
-               'files': [
-                 '<@(copied_libraries)',
--                '<(libchromiumcontent_dir)/icudtl.dat',
-                 '<(libchromiumcontent_dir)/content_shell.pak',
-                 '<(libchromiumcontent_dir)/natives_blob.bin',
-                 '<(libchromiumcontent_dir)/snapshot_blob.bin',
-diff -Naur electron-0.36.2/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc electron-0.36.2.new/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc
---- electron-0.36.2/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc	2015-12-25 14:45:07.000000000 +0900
-+++ electron-0.36.2.new/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc	2015-12-27 09:59:52.829677323 +0900
+diff --git a/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc b/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc
+index 815a9c0..5a0d7f6 100644
+--- a/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc
++++ b/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.cc
 @@ -14,10 +14,10 @@
  #include "base/logging.h"
  #include "base/strings/stringprintf.h"
@@ -39,9 +42,10 @@ diff -Naur electron-0.36.2/chromium_src/chrome/renderer/spellchecker/spellcheck_
  
  // SpellcheckCharAttribute implementation:
  
-diff -Naur electron-0.36.2/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h electron-0.36.2.new/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h
---- electron-0.36.2/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h	2015-12-25 14:45:07.000000000 +0900
-+++ electron-0.36.2.new/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h	2015-12-27 09:59:08.097178707 +0900
+diff --git a/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h b/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h
+index 2ac28a2..0f88da6 100644
+--- a/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h
++++ b/chromium_src/chrome/renderer/spellchecker/spellcheck_worditerator.h
 @@ -14,7 +14,7 @@
  #include "base/basictypes.h"
  #include "base/memory/scoped_ptr.h"

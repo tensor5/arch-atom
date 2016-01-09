@@ -1,6 +1,6 @@
 --- a/script/create-dist
 +++ b/script/create-dist
-@@ -231,7 +231,6 @@
+@@ -241,7 +241,6 @@
 
    copy_sources()
    generate_licenses()

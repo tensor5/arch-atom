@@ -1,6 +1,6 @@
 --- a/chromiumcontent/chromiumcontent.gyp
 +++ b/chromiumcontent/chromiumcontent.gyp
-@@ -44,6 +44,9 @@
+@@ -47,6 +47,9 @@
        'sources': [
          'empty.cc',
        ],
