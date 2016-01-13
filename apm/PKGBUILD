@@ -1,7 +1,7 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=nodejs-atom-package-manager
-pkgver=1.5.0
+pkgver=1.6.0
 pkgrel=1
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
