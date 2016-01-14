@@ -1,6 +1,6 @@
 --- a/build/tasks/build-task.coffee
 +++ b/build/tasks/build-task.coffee
-@@ -148,10 +148,6 @@ module.exports = (grunt) ->
+@@ -148,10 +148,6 @@
      cp 'src', path.join(appDir, 'src'), filter: /.+\.(cson|coffee)$/
      cp 'static', path.join(appDir, 'static')
  
@@ -13,7 +13,7 @@
      cp path.join('resources', 'app-icons', channel, 'png', '1024.png'), path.join(appDir, 'resources', 'atom.png')
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -128,12 +128,7 @@ class PackageManager
+@@ -132,12 +132,7 @@
    getApmPath: ->
      return @apmPath if @apmPath?
  

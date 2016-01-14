@@ -1,6 +1,6 @@
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -295,7 +295,7 @@
+@@ -296,7 +296,7 @@
    ciTasks.push('publish-build') unless process.env.CI
    grunt.registerTask('ci', ciTasks)
  
@@ -40,7 +40,7 @@
 -  "electronVersion": "0.34.5",
    "dependencies": {
      "async": "0.2.6",
-     "atom-keymap": "^6.1.1",
+     "atom-keymap": "^6.2.0",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
 @@ -194,7 +194,7 @@
@@ -54,7 +54,7 @@
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -490,7 +490,7 @@
+@@ -508,7 +503,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
