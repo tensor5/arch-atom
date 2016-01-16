@@ -1,9 +1,9 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=47.0.2526.73
+_chromiumver=47.0.2526.110
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.36.3
+pkgver=0.36.4
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -46,7 +46,7 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '637b7fb47fb8cc5a2b25eba26aa4c12499f98482c83bf8f2aa92a4a7e13d4acc'
+            'dd0814ead32a3a27eafa635721d007a280bb2d042728831c8be3ab20442b699f'
             '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
             '32c33764c179ccbc766b87fd0a0b2e1936fc4a88a7a727270e61cf3a19f1ac6d'
