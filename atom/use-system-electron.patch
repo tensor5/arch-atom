@@ -1,6 +1,6 @@
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -296,7 +296,7 @@
+@@ -297,7 +297,7 @@
    ciTasks.push('publish-build') unless process.env.CI
    grunt.registerTask('ci', ciTasks)
  
@@ -54,7 +54,7 @@
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -508,7 +503,7 @@
+@@ -511,7 +511,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
