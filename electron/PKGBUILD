@@ -160,6 +160,7 @@ build() {
   if [ ${_rebuildcc} -ne 0 ]; then
     echo 'Building libchromiumcontent...'
     cd ${srcdir}/libchromiumcontent
+    export -n CFLAGS CXXFLAGS
     script/update --target_arch=${_target}
     script/build --target_arch=${_target} --component=static_library
     script/create-dist --target_arch=${_target} --component=static_library
