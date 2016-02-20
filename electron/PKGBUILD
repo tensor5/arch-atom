@@ -195,6 +195,8 @@ package() {
   install -m644 content_shell.pak natives_blob.bin snapshot_blob.bin \
           ${pkgdir}/usr/lib/electron
   install -m755 electron ${pkgdir}/usr/lib/electron
+  install -d -m755 ${pkgdir}/usr/bin
+  ln -s ../lib/electron/electron ${pkgdir}/usr/bin
   # namcap warning: Referenced library 'libnode.so' is an uninstalled dependency
   # Fixable by moving libnode.so to /usr/lib
   install -m644 libnode.so ${pkgdir}/usr/lib/electron
