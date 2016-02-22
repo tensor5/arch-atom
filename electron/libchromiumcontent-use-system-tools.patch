@@ -4,7 +4,7 @@ index 8259f49..c4ffd5d 100755
 +++ b/script/build
 @@ -13,7 +13,7 @@ VENDOR_DIR = os.path.join(SOURCE_ROOT, 'vendor')
  TARGETS = ['chromiumcontent_all']
- COMPONENTS = ['static_library', 'shared_library']
+ COMPONENTS = ['static_library', 'shared_library', 'ffmpeg']
  
 -NINJA = os.path.join(VENDOR_DIR, 'depot_tools', 'ninja')
 +NINJA = 'ninja'

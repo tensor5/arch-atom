@@ -2,7 +2,7 @@ diff --git a/atom.gyp b/atom.gyp
 index eb4302d..3d3e161 100644
 --- a/atom.gyp
 +++ b/atom.gyp
-@@ -201,7 +201,6 @@
+@@ -202,7 +202,6 @@
                'files': [
                  '<@(copied_libraries)',
                  '<(libchromiumcontent_dir)/locales',
