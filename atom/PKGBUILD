@@ -1,7 +1,7 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=atom
-pkgver=1.5.3
+pkgver=1.5.4
 pkgrel=1
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
@@ -18,11 +18,11 @@ source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'fix-license-path.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
-sha256sums=('a539c977223bb133e99c277cb62dbd213f582c4d77d9e7a0d14c16ed0a8dd328'
+sha256sums=('7fc9bff949f2e02a4b71be1a9e15cc41b050cc3d3d2a19494f76d87e197725a7'
             'b541b563513d825f6085d97d07379b7909fbef482e4a384de02db8e46fcec836'
             '9ac97587c623ced345587c6d7d3ee9d19e3f383597583794e36d5b9faf78f385'
             '3e9646e588e46f456841edd0fc6daf7e09913be1e049b4e3ce920522e6ecc824'
-            'd440b0561dec6411d95337407162b664af571042fd9a9057dd6b3c791d9c822a')
+            'c580415a1c86df2eb6e065e33607c306bd3349b325959eeb63b92406f639434b')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
