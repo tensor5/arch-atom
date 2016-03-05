@@ -35,7 +35,8 @@ source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
         'libchromiumcontent-use-system-tools.patch'
         'unbundle-libvpx_new-fix.patch'
         'https://codereview.chromium.org/download/issue1414393011_1.diff'
-        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r0.patch')
+        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r0.patch'
+        'chromium-ffmpeg-3.patch')
 noextract=("chromium-${_chromiumver}.tar.xz")
 sha256sums=('SKIP'
             'SKIP'
@@ -59,7 +60,8 @@ sha256sums=('SKIP'
             'b30fbb5e7d97e83c17308623bb6c6071e44b203f570d8d9039e0fc427636fe45'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
             'c7dd15464752d31ff63bf4513ea0eef3bcd088e33a10789dd211a058e0dfae1b'
-            '32f65bb6d1a70eea8c0536e7d9aebf8f09cb161d2dd0cda8ace52ae0e417761d')
+            '32f65bb6d1a70eea8c0536e7d9aebf8f09cb161d2dd0cda8ace52ae0e417761d'
+            'd4c3da5cc9f43c71786f09346b9685372f7e465f32bf7ce455b279c919f88b8b')
 
 prepare() {
   cd ${srcdir}/electron
@@ -150,6 +152,7 @@ prepare() {
         -i src/build/common.gypi
     cd src
     patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r0.patch  # Use system ffmpeg
+    patch -Np1 -i ${srcdir}/chromium-ffmpeg-3.patch
     find third_party/icu -type f \! -regex '.*\.\(gyp\|gypi\|isolate\)' -delete  # Use system icu
     patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
     patch -Np1 -i ${srcdir}/issue1414393011_1.diff  # Use system zlib
