@@ -3,7 +3,7 @@
 _chromiumver=47.0.2526.110
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.36.9
+pkgver=0.36.10
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
