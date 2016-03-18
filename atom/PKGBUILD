@@ -1,7 +1,7 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=atom
-pkgver=1.5.4
+pkgver=1.6.0
 pkgrel=1
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
@@ -18,11 +18,11 @@ source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'fix-license-path.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
-sha256sums=('7fc9bff949f2e02a4b71be1a9e15cc41b050cc3d3d2a19494f76d87e197725a7'
+sha256sums=('e08024308daa61967db5b81c38d913696f6bdffd689c5b96050832c4b2026d52'
             'b541b563513d825f6085d97d07379b7909fbef482e4a384de02db8e46fcec836'
-            '9ac97587c623ced345587c6d7d3ee9d19e3f383597583794e36d5b9faf78f385'
-            '3e9646e588e46f456841edd0fc6daf7e09913be1e049b4e3ce920522e6ecc824'
-            'c580415a1c86df2eb6e065e33607c306bd3349b325959eeb63b92406f639434b')
+            '8cdcccdb7f735d91227800e6ea8ed46880b0c45f001e0379c357bf5a080f5293'
+            '8fbba67bf0cf1c9812837116c424c6f64e57ba33bc1984470c5bd8dbb080d3e6'
+            'c9b25278fdcb810028d0abaf8a7db48da09b266bb69a5f92475b7a573e9b8e3b')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -70,14 +70,14 @@ build() {
   cd build
   npm install
   cd ..
-  script/grunt --build-dir="${srcdir}/atom-build" --channel=stable
+  script/grunt --channel=stable
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   install -d -m 755 "${pkgdir}"/usr/lib
-  cp -r "${srcdir}"/atom-build/Atom/resources/app "${pkgdir}"/usr/lib
+  cp -r out/Atom/resources/app "${pkgdir}"/usr/lib
   mv "${pkgdir}"/usr/lib/app "${pkgdir}"/usr/lib/atom
 
   install -d -m 755 "${pkgdir}/usr/share/applications"
@@ -87,10 +87,9 @@ package() {
       -e "s|<%= iconPath %>|/usr/lib/atom/resources/atom.png|" \
       resources/linux/atom.desktop.in > "${pkgdir}/usr/share/applications/atom.desktop"
 
-  install -D -m 755 "${srcdir}"/atom-build/Atom/resources/new-app/atom.sh \
-          "${pkgdir}/usr/bin/atom"
+  install -D -m 755 out/Atom/resources/new-app/atom.sh "${pkgdir}/usr/bin/atom"
 
-  install -D -m 755 "${srcdir}"/atom-build/Atom/resources/LICENSE.md \
+  install -D -m 755 out/Atom/resources/LICENSE.md \
           "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.md"
 
   # Remove useless stuff

@@ -11,7 +11,7 @@
        @saveState(false)
 --- a/src/workspace.coffee
 +++ b/src/workspace.coffee
-@@ -432,7 +432,7 @@
+@@ -442,7 +442,7 @@
  
    # Open Atom's license in the active pane.
    openLicense: ->
