@@ -52,6 +52,21 @@
      fs = require 'fs-plus'
      atomCoffeePath = path.join(cache.resourcePath, 'exports', 'atom.coffee')
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
+@@ -202,12 +202,12 @@
+ 
+   atomShellRoot = path.join(process.resourcesPath, 'atom.asar')
+ 
+-  commonRoot = path.join(atomShellRoot, 'common', 'api', 'lib')
++  commonRoot = path.join(atomShellRoot, 'common', 'api')
+   commonBuiltins = ['callbacks-registry', 'clipboard', 'crash-reporter', 'screen', 'shell']
+   for builtin in commonBuiltins
+     cache.builtins[builtin] = path.join(commonRoot, "#{builtin}.js")
+ 
+-  rendererRoot = path.join(atomShellRoot, 'renderer', 'api', 'lib')
++  rendererRoot = path.join(atomShellRoot, 'renderer', 'api')
+   rendererBuiltins = ['ipc', 'remote']
+   for builtin in rendererBuiltins
+     cache.builtins[builtin] = path.join(rendererRoot, "#{builtin}.js")
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
 @@ -511,7 +511,7 @@
