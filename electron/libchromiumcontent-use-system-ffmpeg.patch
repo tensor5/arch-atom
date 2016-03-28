@@ -1,17 +1,17 @@
 --- a/script/create-dist
 +++ b/script/create-dist
-@@ -87,7 +87,6 @@ BINARIES = {
-     'libyuv_neon.a',
+@@ -86,7 +86,6 @@ BINARIES = {
+     'libyuv.a',
      'libsystem_wrappers.a',
      'libcdm_renderer.a',
 -    os.path.join('lib', 'libffmpeg.so'),
    ],
    'win32': [
      'chromedriver.exe',
-@@ -243,7 +242,6 @@ def main():
+@@ -278,7 +277,6 @@ def main():
        copy_generated_sources(target_arch, component, output_dir)
        copy_locales(target_arch, component, output_dir)
-
+ 
 -  copy_ffmpeg(target_arch)
    copy_sources()
    generate_licenses()

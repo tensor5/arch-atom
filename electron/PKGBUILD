@@ -1,15 +1,15 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=47.0.2526.110
+_chromiumver=49.0.2623.75
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.36.11
+pkgver=0.37.3
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
-depends=('ffmpeg' 'gconf' 'gtk2' 'icu' 'libevent' 'libnotify' 'libvpx' 'libxslt'
+depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libnotify' 'libvpx' 'libxslt'
          'minizip' 'nss' 're2' 'snappy')
 makedepends=('clang' 'git' 'harfbuzz-icu' 'jsoncpp' 'libexif' 'ninja' 'npm'
              'python2' 'yasm')
@@ -25,18 +25,16 @@ source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
         'git+https://github.com/kennethreitz/requests.git'
         'google-breakpad::git+https://chromium.googlesource.com/external/google-breakpad/src.git'
         "https://github.com/zcbenz/chromium-source-tarball/releases/download/${_chromiumver}/chromium-${_chromiumver}.tar.xz"
+        'dont-use-sysroot.patch'
         'use-system-clang.patch'
         'use-system-ninja.patch'
         'use-system-ffmpeg.patch'
-        'use-system-icu.patch'
         'brightray-use-system-ffmpeg.patch'
         'libchromiumcontent-dont-create-zip.patch'
         'libchromiumcontent-use-system-ffmpeg.patch'
         'libchromiumcontent-use-system-tools.patch'
         'unbundle-libvpx_new-fix.patch'
-        'https://codereview.chromium.org/download/issue1414393011_1.diff'
-        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r0.patch'
-        'chromium-ffmpeg-3.patch')
+        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r2.patch')
 noextract=("chromium-${_chromiumver}.tar.xz")
 sha256sums=('SKIP'
             'SKIP'
@@ -49,19 +47,17 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            'dd0814ead32a3a27eafa635721d007a280bb2d042728831c8be3ab20442b699f'
+            '038f388d9db1aadc45e546c20bdede1ec8ce691915aa69b6dfd96d9c1e84d3e1'
+            '8506a88178e49d235adc1ab225987628e3290965ee1dbc6b7d526f4120ea8466'
             '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
-            '4b83e2160465e229ca6bd6de2e154c44540b9e6e0d2c4376bbfc49dfe81bfda1'
-            '9ebdee0f9880ff881bb4131366f4257d1d6f61d353d5c7eb9cedd32407053d4f'
+            'c32bea0fe355425c0887826b6504af24bf4cf2d8af24ef311e7466ef20cf9f5e'
             'f59960b43f36399ea16622c7c494780aa14e9c21fedd8b07db210c6993fcc543'
-            '71e8d28c5bd51fe82b546c665c70b325b83d76671c621a43dd58ba0a59c5b577'
-            'a92ee4374b8957556fdab5e156db09e96477e97a583bdeccc5b9a77d4579ac7e'
+            '4f525b2f001cd0a27295f790f55db2760371e3a959abec2e0f29ee8e3d879899'
+            '963d02d35e3127a5ed4787ba24977f6e520416c86d37aed25ccf8c1db187e68d'
             'b30fbb5e7d97e83c17308623bb6c6071e44b203f570d8d9039e0fc427636fe45'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
-            'c7dd15464752d31ff63bf4513ea0eef3bcd088e33a10789dd211a058e0dfae1b'
-            '32f65bb6d1a70eea8c0536e7d9aebf8f09cb161d2dd0cda8ace52ae0e417761d'
-            'd4c3da5cc9f43c71786f09346b9685372f7e465f32bf7ce455b279c919f88b8b')
+            'de19a06e10f6fb8a405c019b04dffa1616cd770bee6aa96adc9028fd7e3e2de1')
 
 prepare() {
   cd ${srcdir}/electron
@@ -69,7 +65,7 @@ prepare() {
   patch -Np1 -i ${srcdir}/use-system-clang.patch
   patch -Np1 -i ${srcdir}/use-system-ninja.patch
   patch -Np1 -i ${srcdir}/use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/use-system-icu.patch
+  patch -Np1 -i ${srcdir}/dont-use-sysroot.patch
 
   mkdir -p ${srcdir}/python2-path
   ln -sf /usr/bin/python2 "${srcdir}/python2-path/python"
@@ -97,7 +93,7 @@ prepare() {
   git submodule update
   # Remove unused shared library and add extra libraries for unbundling
   sed -e "/-lcups/d" \
-      -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu icu-i18n jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
+      -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
       -i brightray.gyp
 
   if [ ${_rebuildcc} -ne 0 ]; then
@@ -109,20 +105,17 @@ prepare() {
     patch -Np1 -i "${srcdir}"/libchromiumcontent-dont-create-zip.patch
     patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-ffmpeg.patch
     rm patches/third_party/ffmpeg/ffmpeg.patch  # Use system ffmpeg
-    sed -e "/icudtl.dat/d" -i script/create-dist  # Use system icu
     _chromium_flags=('clang=1'
                      'clang_use_chrome_plugins=0'
-                     'disable_fatal_linker_warnings=1'  # Use system ffmpeg
                      'fastbuild=2'
                      'host_clang=0'
-                     'icu_use_data_file_flag=0'
-                     'release_extra_cflags="-O3"'
+                     'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
                      'remove_webcore_debug_symbols=1'
+                     'use_sysroot=0'
                      'use_system_expat=1'
                      'use_system_ffmpeg=1'
                      'use_system_flac=1'
                      'use_system_harfbuzz=1'
-                     'use_system_icu=1'
                      'use_system_jsoncpp=1'
                      'use_system_libevent=1'
                      'use_system_libjpeg=1'
@@ -148,14 +141,9 @@ prepare() {
     if [ ! -e src/.version ]; then
       echo "${_chromiumver}" > src/.version
     fi
-    sed -e "/Wno-bitfield-width/d" -e "/detect-odr-violations/d" \
-        -i src/build/common.gypi
     cd src
-    patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r0.patch  # Use system ffmpeg
-    patch -Np1 -i ${srcdir}/chromium-ffmpeg-3.patch
-    find third_party/icu -type f \! -regex '.*\.\(gyp\|gypi\|isolate\)' -delete  # Use system icu
+    patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r2.patch  # Use system ffmpeg
     patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
-    patch -Np1 -i ${srcdir}/issue1414393011_1.diff  # Use system zlib
     build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
   fi
 }
@@ -204,7 +192,7 @@ package() {
 
   cd out/R
   install -d -m755 ${pkgdir}/usr/lib/electron
-  install -m644 content_shell.pak natives_blob.bin snapshot_blob.bin \
+  install -m644 content_shell.pak icudtl.dat natives_blob.bin snapshot_blob.bin \
           ${pkgdir}/usr/lib/electron
   install -m755 electron ${pkgdir}/usr/lib/electron
   install -d -m755 ${pkgdir}/usr/bin
