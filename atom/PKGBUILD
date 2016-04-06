@@ -2,7 +2,7 @@
 
 pkgname=atom
 pkgver=1.6.2
-pkgrel=1
+pkgrel=2
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -22,7 +22,7 @@ sha256sums=('63ee85a67d642bf85179c67ba455042e2892a5091dedc31f007f8ec2de8fc3af'
             'b541b563513d825f6085d97d07379b7909fbef482e4a384de02db8e46fcec836'
             '8cdcccdb7f735d91227800e6ea8ed46880b0c45f001e0379c357bf5a080f5293'
             '8fbba67bf0cf1c9812837116c424c6f64e57ba33bc1984470c5bd8dbb080d3e6'
-            'cb24ccb28a983a956545679ea06fdf981fa8f6a8c2e352140b713f0a4e6fd1b2')
+            'c1d2104ec8c77313272cdcc976721d16015eb9fd44125f423e965112cfd0fe31')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"

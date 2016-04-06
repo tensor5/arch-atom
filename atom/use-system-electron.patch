@@ -43,7 +43,7 @@
      "atom-keymap": "6.3.2",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
-@@ -194,7 +194,7 @@
+@@ -194,20 +194,20 @@
    return
  
  registerBuiltins = (devMode) ->
@@ -52,9 +52,10 @@
      fs = require 'fs-plus'
      atomCoffeePath = path.join(cache.resourcePath, 'exports', 'atom.coffee')
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
-@@ -202,12 +202,12 @@
+   cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
  
-   atomShellRoot = path.join(process.resourcesPath, 'atom.asar')
+-  atomShellRoot = path.join(process.resourcesPath, 'atom.asar')
++  atomShellRoot = path.join(process.resourcesPath, 'electron.asar')
  
 -  commonRoot = path.join(atomShellRoot, 'common', 'api', 'lib')
 +  commonRoot = path.join(atomShellRoot, 'common', 'api')

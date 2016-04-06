@@ -3,7 +3,7 @@
 _chromiumver=49.0.2623.75
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.37.3
+pkgver=0.37.4
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -51,7 +51,7 @@ sha256sums=('SKIP'
             '8506a88178e49d235adc1ab225987628e3290965ee1dbc6b7d526f4120ea8466'
             '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
-            'c32bea0fe355425c0887826b6504af24bf4cf2d8af24ef311e7466ef20cf9f5e'
+            '8191483a1f51ee4a5dd1e7e6bb699ad52321291ef79ffed11bbf8f2b6fb89034'
             'f59960b43f36399ea16622c7c494780aa14e9c21fedd8b07db210c6993fcc543'
             '4f525b2f001cd0a27295f790f55db2760371e3a959abec2e0f29ee8e3d879899'
             '963d02d35e3127a5ed4787ba24977f6e520416c86d37aed25ccf8c1db187e68d'
@@ -77,6 +77,10 @@ prepare() {
     git config submodule.vendor/${m}.url ${srcdir}/${m}
   done
   git submodule update
+
+  # https://github.com/electron/electron/commit/7796dbb7cedbf6822fba97c2aafbb62d0adf22d3
+  cd ${srcdir}/electron/vendor/node
+  git checkout c18d608cd584e6b1c94a5d0d89939a1457f589b0
 
   cd ${srcdir}/electron/vendor/breakpad
   git submodule init src
