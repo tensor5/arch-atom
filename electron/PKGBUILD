@@ -3,7 +3,7 @@
 _chromiumver=49.0.2623.75
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.37.4
+pkgver=0.37.5
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -13,15 +13,15 @@ depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libnotify' 'libvpx' 'libxslt'
          'minizip' 'nss' 're2' 'snappy')
 makedepends=('clang' 'git' 'harfbuzz-icu' 'jsoncpp' 'libexif' 'ninja' 'npm'
              'python2' 'yasm')
-source=("git+https://github.com/atom/electron.git#tag=v${pkgver}"
+source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'git+https://github.com/boto/boto.git'
-        'git+https://github.com/atom/brightray.git'
-        'breakpad::git+https://github.com/atom/chromium-breakpad.git'
-        'git+https://github.com/atom/crashpad.git'
+        'git+https://github.com/electron/brightray.git'
+        'breakpad::git+https://github.com/electron/chromium-breakpad.git'
+        'git+https://github.com/electron/crashpad.git'
         'git+https://github.com/svn2github/gyp.git'
-        "git+https://github.com/atom/libchromiumcontent.git"
+        "git+https://github.com/electron/libchromiumcontent.git"
         'native_mate::git+https://github.com/zcbenz/native-mate.git'
-        'git+https://github.com/atom/node.git'
+        'git+https://github.com/electron/node.git'
         'git+https://github.com/kennethreitz/requests.git'
         'google-breakpad::git+https://chromium.googlesource.com/external/google-breakpad/src.git'
         "https://github.com/zcbenz/chromium-source-tarball/releases/download/${_chromiumver}/chromium-${_chromiumver}.tar.xz"
@@ -77,10 +77,6 @@ prepare() {
     git config submodule.vendor/${m}.url ${srcdir}/${m}
   done
   git submodule update
-
-  # https://github.com/electron/electron/commit/7796dbb7cedbf6822fba97c2aafbb62d0adf22d3
-  cd ${srcdir}/electron/vendor/node
-  git checkout c18d608cd584e6b1c94a5d0d89939a1457f589b0
 
   cd ${srcdir}/electron/vendor/breakpad
   git submodule init src
