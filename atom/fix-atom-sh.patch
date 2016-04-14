@@ -1,14 +1,12 @@
 --- a/atom.sh
 +++ b/atom.sh
-@@ -1,22 +1,5 @@
+@@ -1,20 +1,5 @@
  #!/bin/bash
  
 -if [ "$(uname)" == 'Darwin' ]; then
 -  OS='Mac'
 -elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
 -  OS='Linux'
--elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
--  OS='Cygwin'
 -else
 -  echo "Your platform ($(uname -a)) is not supported."
 -  exit 1
@@ -23,7 +21,7 @@
  while getopts ":wtfvh-:" opt; do
    case "$opt" in
      -)
-@@ -54,66 +37,22 @@
+@@ -52,66 +37,22 @@
    export ELECTRON_ENABLE_LOGGING=1
  fi
  
