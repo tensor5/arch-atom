@@ -1,6 +1,6 @@
 --- a/script/create-dist
 +++ b/script/create-dist
-@@ -281,7 +281,6 @@
+@@ -296,7 +296,6 @@
    copy_ffmpeg(target_arch)
    copy_sources()
    generate_licenses()

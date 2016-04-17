@@ -3,7 +3,7 @@
 _chromiumver=49.0.2623.75
 _rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.37.5
+pkgver=0.37.6
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -52,9 +52,9 @@ sha256sums=('SKIP'
             '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
             '8191483a1f51ee4a5dd1e7e6bb699ad52321291ef79ffed11bbf8f2b6fb89034'
-            'f59960b43f36399ea16622c7c494780aa14e9c21fedd8b07db210c6993fcc543'
-            '4f525b2f001cd0a27295f790f55db2760371e3a959abec2e0f29ee8e3d879899'
-            '963d02d35e3127a5ed4787ba24977f6e520416c86d37aed25ccf8c1db187e68d'
+            '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
+            'b925963a637511eed2895ed00e329614dc28633421b33846dc8649522b1b9743'
+            '341fde7718b2a1aa2b0b4f2eff240ab57236f4af04ddf7f36760acd326450083'
             'b30fbb5e7d97e83c17308623bb6c6071e44b203f570d8d9039e0fc427636fe45'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
             'de19a06e10f6fb8a405c019b04dffa1616cd770bee6aa96adc9028fd7e3e2de1')
