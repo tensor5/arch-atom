@@ -9,8 +9,8 @@ pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
-depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libnotify' 'libvpx' 'libxslt' 'nss'
-         're2' 'snappy')
+depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libnotify' 'libvpx' 'libxslt'
+         'minizip' 'nss' 're2' 'snappy')
 makedepends=('clang' 'git' 'harfbuzz-icu' 'jsoncpp' 'libexif' 'ninja' 'npm'
              'python2' 'yasm')
 source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
@@ -34,7 +34,9 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'libchromiumcontent-use-system-ffmpeg.patch'
         'libchromiumcontent-use-system-tools.patch'
         'unbundle-libvpx_new-fix.patch'
-        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r2.patch')
+        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r2.patch'
+        'minizip.patch'
+       )
 noextract=("chromium-${_chromiumver}.tar.xz")
 sha256sums=('SKIP'
             'SKIP'
@@ -57,7 +59,9 @@ sha256sums=('SKIP'
             '341fde7718b2a1aa2b0b4f2eff240ab57236f4af04ddf7f36760acd326450083'
             'b30fbb5e7d97e83c17308623bb6c6071e44b203f570d8d9039e0fc427636fe45'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
-            'de19a06e10f6fb8a405c019b04dffa1616cd770bee6aa96adc9028fd7e3e2de1')
+            'de19a06e10f6fb8a405c019b04dffa1616cd770bee6aa96adc9028fd7e3e2de1'
+            'ae8db257191600e5d1e3d3142c8b430652047c2b3575d82696573f1649154c62'
+           )
 
 prepare() {
   cd ${srcdir}/electron
@@ -93,7 +97,7 @@ prepare() {
   git submodule update
   # Remove unused shared library and add extra libraries for unbundling
   sed -e "/-lcups/d" \
-      -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
+      -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
       -i brightray.gyp
 
   if [ ${_rebuildcc} -ne 0 ]; then
@@ -127,6 +131,7 @@ prepare() {
                      'use_system_re2=1'
                      'use_system_snappy=1'
                      'use_system_yasm=1'
+                     'use_system_zlib=1'
                     )
     cd ${srcdir}/libchromiumcontent/vendor/chromium
     echo "{" > chromium.gyp_env
@@ -142,6 +147,7 @@ prepare() {
     fi
     cd src
     patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r2.patch  # Use system ffmpeg
+    patch -Np1 -i ${srcdir}/minizip.patch  # Use system minizip
     patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
     build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
   fi
