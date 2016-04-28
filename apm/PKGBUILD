@@ -2,7 +2,7 @@
 
 pkgname=nodejs-atom-package-manager
 pkgver=1.7.1
-pkgrel=1
+pkgrel=2
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
@@ -11,28 +11,41 @@ groups=('atom')
 depends=('libgnome-keyring' 'nodejs' 'python2')
 makedepends=('npm')
 options=(!emptydirs)
-source=('electron-version.patch'
+source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
+        'electron-version.patch'
         'use-system-nodejs.patch')
-sha256sums=('eb72cc1c35697b85be11ae9e7d08a648c16c7d0e6fec034e00cffbe465e006e7'
+sha256sums=('7001da4ed327b3e52a4d16342649124243eec87d4d4a277524a651550c29c3c6'
+            'eb72cc1c35697b85be11ae9e7d08a648c16c7d0e6fec034e00cffbe465e006e7'
             '66dfc84b5cd76dd02ef6cf04d532cdb2ff6a6eaa4d94bf47ab5ed81d9e13326c')
 
 prepare() {
   rm -rf "${srcdir}"/apm-build
+
+  cd apm-${pkgver}
+
+  sed -e '/"install": "node .\/script\/download-node.js",/d' -i package.json
+  rm -r script
+
+  # keytar-3.0.1 pins the version of nan to 2.0.0, and fails to compile with
+  # nodejs-6.0.0
+  sed -e 's|"keytar": "^3.0"|"keytar": "3.0.0"|' -i package.json
 }
 
 build() {
-  npm install --user root -g \
-      --prefix="${srcdir}"/apm-build/usr atom-package-manager@${pkgver}
+  cd apm-${pkgver}
+
+  npm install --only=dev
+  npm install --user root -g --prefix="${srcdir}"/apm-build/usr
 }
 
 package() {
   cp -r "${srcdir}"/apm-build/usr "${pkgdir}"
 
   cd "${pkgdir}"/usr/lib/node_modules/atom-package-manager
+  install -m644 "${srcdir}"/apm-${pkgver}/README.md ./
   patch -Np1 -i ${srcdir}/electron-version.patch
   patch -Np1 -i ${srcdir}/use-system-nodejs.patch
-  rm bin/{apm.cmd,node}
-  sed -e '/"install": "node .\/script\/download-node.js",/d' -i package.json
+  rm bin/apm.cmd
 
   # Fix location of Atom app
   sed -e 's|share/atom/resources/app.asar|lib/atom|g' \
