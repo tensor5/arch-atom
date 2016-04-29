@@ -7,12 +7,10 @@ pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
 license=('MIT' 'custom')
-depends=('desktop-file-utils'
-         'electron'
+depends=('electron'
          'nodejs-atom-package-manager')
 makedepends=('npm')
 conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
-install='atom.install'
 source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'fix-atom-sh.patch'
         'fix-license-path.patch'
