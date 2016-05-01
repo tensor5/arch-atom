@@ -41,7 +41,9 @@ build() {
 package() {
   cp -r "${srcdir}"/apm-build/usr "${pkgdir}"
 
-  cd "${pkgdir}"/usr/lib/node_modules/atom-package-manager
+  _apmdir='/usr/lib/node_modules/atom-package-manager'
+
+  cd "${pkgdir}"${_apmdir}
   install -m644 "${srcdir}"/apm-${pkgver}/README.md ./
   patch -Np1 -i ${srcdir}/electron-version.patch
   patch -Np1 -i ${srcdir}/use-system-nodejs.patch
@@ -49,16 +51,18 @@ package() {
 
   # Fix location of Atom app
   sed -e 's|share/atom/resources/app.asar|lib/atom|g' \
-      -i "${pkgdir}"/usr/lib/node_modules/atom-package-manager/lib/apm.js
+      -i "${pkgdir}"${_apmdir}/lib/apm.js
 
   # Install license file
   install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
   ln -s ../../../lib/node_modules/atom-package-manager/LICENSE.md \
      "${pkgdir}/usr/share/licenses/${pkgname}"
 
-  # Remove occurences of ${srcdir}
+  # Remove occurrences of ${srcdir}
   find "${pkgdir}" -name "package.json" \
-       -exec sed -e "s|${srcdir}/apm-build||" -i '{}' \;
+       -exec sed -e "s|${srcdir}/apm-build||" \
+                 -e "s|${srcdir}/apm-${pkgver}|${_apmdir}|" \
+                 -i '{}' \;
 
   # Remove useless stuff and use python2
   find "${pkgdir}"/usr/lib \
