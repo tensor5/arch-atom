@@ -1,8 +1,8 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=nodejs-atom-package-manager
-pkgver=1.7.1
-pkgrel=2
+pkgver=1.9.3
+pkgrel=1
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
@@ -13,9 +13,11 @@ makedepends=('npm')
 options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'electron-version.patch'
+        'truncated-json-output.patch'
         'use-system-nodejs.patch')
-sha256sums=('7001da4ed327b3e52a4d16342649124243eec87d4d4a277524a651550c29c3c6'
-            'eb72cc1c35697b85be11ae9e7d08a648c16c7d0e6fec034e00cffbe465e006e7'
+sha256sums=('13409ce7b4f93ba99fb7dbc7c7e14576772bff6eb635b1b6a83b4c669b4df131'
+            'f8224823940b6ac6dfce3c7cd82dfc8e3461681c0a2ec49836360043c45e4fb0'
+            '5b82ddc531a7ac477041fb492cc95532022e19449168784d87c5e31079255036'
             '66dfc84b5cd76dd02ef6cf04d532cdb2ff6a6eaa4d94bf47ab5ed81d9e13326c')
 
 prepare() {
@@ -29,6 +31,9 @@ prepare() {
   # keytar-3.0.1 pins the version of nan to 2.0.0, and fails to compile with
   # nodejs-6.0.0
   sed -e 's|"keytar": "^3.0"|"keytar": "3.0.0"|' -i package.json
+
+  # Fix the callback that runs process.exit() before JSON output completes
+  patch -Np1 -i ${srcdir}/truncated-json-output.patch
 }
 
 build() {

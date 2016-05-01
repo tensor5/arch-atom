@@ -1,0 +1,12 @@
+--- a/src/list.coffee
++++ b/src/list.coffee
+@@ -166,8 +166,7 @@
+           @listGitPackages options, (error, packages) ->
+             return callback(error) if error
+             output.git = packages
+-            console.log JSON.stringify(output)
+-            callback()
++            process.stdout.write JSON.stringify(output) + '\n', callback
+ 
+   run: (options) ->
+     {callback} = options
