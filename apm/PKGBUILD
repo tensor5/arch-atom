@@ -28,10 +28,6 @@ prepare() {
   patch -ENp1 -i ${srcdir}/use-system-nodejs.patch
   patch -Np1 -i ${srcdir}/environment.patch
 
-  # keytar-3.0.1 pins the version of nan to 2.0.0, and fails to compile with
-  # nodejs-6.0.0
-  sed -e 's|"keytar": "^3.0"|"keytar": "3.0.0"|' -i package.json
-
   # Fix the callback that runs process.exit() before JSON output completes
   patch -Np1 -i ${srcdir}/truncated-json-output.patch
 }
