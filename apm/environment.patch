@@ -1,0 +1,18 @@
+--- a/bin/apm
++++ b/bin/apm
+@@ -1,7 +1,14 @@
+-#!/bin/bash
++#!/usr/bin/bash
+ 
+ set -e
+ 
++if [ -z ${ATOM_ELECTRON_VERSION} ]; then
++  ELECTRON_VERSION=$(< /usr/lib/electron/version)
++  export ATOM_ELECTRON_VERSION=${ELECTRON_VERSION#v}
++fi
++
++export ATOM_RESOURCE_PATH=${ATOM_RESOURCE_PATH:-/usr/lib/atom}
++
+ initialCwd=`pwd -P`
+ 
+ apmPath=$0
