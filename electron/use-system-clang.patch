@@ -1,25 +1,14 @@
-diff --git a/script/bootstrap.py b/script/bootstrap.py
-index ef48c1f..5f93a4b 100755
 --- a/script/bootstrap.py
 +++ b/script/bootstrap.py
-@@ -33,9 +33,6 @@ def main():
-   if sys.platform == 'cygwin':
-     update_win32_python()
+@@ -50,9 +50,9 @@
+     libcc_static_library_path = os.path.join(dist_dir, 'static_library')
  
--  if PLATFORM != 'win32':
+   if PLATFORM != 'win32':
+-    # Download prebuilt clang binaries.
 -    update_clang()
--
-   update_submodules()
-   setup_python_libs()
-   update_node_modules('.')
-@@ -128,8 +125,8 @@ def update_node_modules(dirname, env=None):
-     # Use prebuilt clang for building native modules.
-     llvm_dir = os.path.join(SOURCE_ROOT, 'vendor', 'llvm-build',
-                             'Release+Asserts', 'bin')
--    env['CC']  = os.path.join(llvm_dir, 'clang')
--    env['CXX'] = os.path.join(llvm_dir, 'clang++')
-+    env['CC']  = 'clang'
-+    env['CXX'] = 'clang++'
-     env['npm_config_clang'] = '1'
-   with scoped_cwd(dirname):
-     args = [NPM, 'install']
+     if not args.disable_clang and args.clang_dir == '':
++      # Download prebuilt clang binaries.
++      update_clang()
+       # Build with prebuilt clang.
+       set_clang_env(os.environ)
+ 

@@ -1,9 +1,8 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 _chromiumver=49.0.2623.75
-_rebuildcc=1  # 0: don't rebuild libchromiumcontent
 pkgname=electron
-pkgver=0.37.8
+pkgver=1.0.1
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -25,13 +24,14 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'git+https://github.com/kennethreitz/requests.git'
         'google-breakpad::git+https://chromium.googlesource.com/external/google-breakpad/src.git'
         "https://github.com/zcbenz/chromium-source-tarball/releases/download/${_chromiumver}/chromium-${_chromiumver}.tar.xz"
+        'dont-bootstrap-libchromiumcontent.patch'
         'dont-use-sysroot.patch'
         'use-system-clang.patch'
         'use-system-ninja.patch'
         'use-system-ffmpeg.patch'
         'brightray-use-system-ffmpeg.patch'
         'gyp-no-rpath.patch'
-        'libchromiumcontent-dont-create-zip.patch'
+        'libchromiumcontent-static-library-only.patch'
         'libchromiumcontent-use-system-ffmpeg.patch'
         'libchromiumcontent-use-system-tools.patch'
         'unbundle-libvpx_new-fix.patch'
@@ -51,15 +51,16 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             '038f388d9db1aadc45e546c20bdede1ec8ce691915aa69b6dfd96d9c1e84d3e1'
-            '8506a88178e49d235adc1ab225987628e3290965ee1dbc6b7d526f4120ea8466'
-            '4377d253749cd2e851870ec499e90a013ce4c5c4833009e785e8e77423bf2b26'
+            '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
+            '5d75a54020759a249a4269d42d4ee231ee73c200bfd16cbfc82dc7bb49abcb31'
+            'c002fce984fda849102d62671ed2daba521cfda2886f4276976692486b57b5e2'
             '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
             '8191483a1f51ee4a5dd1e7e6bb699ad52321291ef79ffed11bbf8f2b6fb89034'
             '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
             'dc9a3c1fa99528e6dde8a85de730f8d8e0502e7c6809119564ea21bc604cda0a'
-            'b925963a637511eed2895ed00e329614dc28633421b33846dc8649522b1b9743'
-            '341fde7718b2a1aa2b0b4f2eff240ab57236f4af04ddf7f36760acd326450083'
-            'b30fbb5e7d97e83c17308623bb6c6071e44b203f570d8d9039e0fc427636fe45'
+            'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
+            'c8cc2c5afef32dd30c67e3f0ad7b9750475a08da6bccb9f317ff46885b21472c'
+            '2fb2157c854dab173a2ef9b4aa0ab5bb3c0dd077447c4719c7554eee6e0546b6'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
             'de19a06e10f6fb8a405c019b04dffa1616cd770bee6aa96adc9028fd7e3e2de1'
             'ae8db257191600e5d1e3d3142c8b430652047c2b3575d82696573f1649154c62'
@@ -72,6 +73,7 @@ prepare() {
   patch -Np1 -i ${srcdir}/use-system-ninja.patch
   patch -Np1 -i ${srcdir}/use-system-ffmpeg.patch
   patch -Np1 -i ${srcdir}/dont-use-sysroot.patch
+  patch -Np1 -i ${srcdir}/dont-bootstrap-libchromiumcontent.patch
 
   mkdir -p ${srcdir}/python2-path
   ln -sf /usr/bin/python2 "${srcdir}/python2-path/python"
@@ -106,57 +108,49 @@ prepare() {
   # Remove a useless $ORIGIN/lib/ rpath from the electron binary
   patch -Np1 -i ${srcdir}/gyp-no-rpath.patch
 
-  if [ ${_rebuildcc} -ne 0 ]; then
-    cd ${srcdir}/libchromiumcontent
-    _cc_commit=$(grep LIBCHROMIUMCONTENT_COMMIT ../electron/script/lib/config.py | awk 'BEGIN { FS = "=" } ; { print $2 }')
-    git checkout ${_cc_commit:2:40}
-    git submodule update --init vendor/python-patch
-    patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
-    patch -Np1 -i "${srcdir}"/libchromiumcontent-dont-create-zip.patch
-    patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-ffmpeg.patch
-    rm patches/third_party/ffmpeg/ffmpeg.patch  # Use system ffmpeg
-    _chromium_flags=('clang=1'
-                     'clang_use_chrome_plugins=0'
-                     'fastbuild=2'
-                     'host_clang=0'
-                     'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
-                     'remove_webcore_debug_symbols=1'
-                     'use_sysroot=0'
-                     'use_system_expat=1'
-                     'use_system_ffmpeg=1'
-                     'use_system_flac=1'
-                     'use_system_harfbuzz=1'
-                     'use_system_jsoncpp=1'
-                     'use_system_libevent=1'
-                     'use_system_libjpeg=1'
-                     'use_system_libpng=1'
-                     'use_system_libvpx=1'
-                     'use_system_libwebp=1'
-                     'use_system_libxml=1'
-                     'use_system_libxslt=1'
-                     'use_system_re2=1'
-                     'use_system_snappy=1'
-                     'use_system_yasm=1'
-                     'use_system_zlib=1'
-                    )
-    cd ${srcdir}/libchromiumcontent/vendor/chromium
-    echo "{" > chromium.gyp_env
-    echo "  'CC': 'clang -Qunused-arguments'," >> chromium.gyp_env
-    echo "  'CXX': 'clang++ -Qunused-arguments'," >> chromium.gyp_env
-    echo "  'GYP_DEFINES': '${_chromium_flags[*]}'" >> chromium.gyp_env
-    echo "}" >> chromium.gyp_env
-    echo 'Extracting chromium source...'
-    tar -xJf "${srcdir}"/chromium-${_chromiumver}.tar.xz
-    mv chromium-${_chromiumver} src
-    if [ ! -e src/.version ]; then
-      echo "${_chromiumver}" > src/.version
-    fi
-    cd src
-    patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r2.patch  # Use system ffmpeg
-    patch -Np1 -i ${srcdir}/minizip.patch  # Use system minizip
-    patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
-    build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
+  cd ${srcdir}/electron/vendor/brightray/vendor/libchromiumcontent
+  git submodule update --init vendor/python-patch
+  patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
+  patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-ffmpeg.patch
+  patch -Np1 -i "${srcdir}"/libchromiumcontent-static-library-only.patch
+  rm patches/third_party/ffmpeg/ffmpeg.patch  # Use system ffmpeg
+  _chromium_flags=('fastbuild=2'
+                   'host_clang=0'
+                   'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
+                   'remove_webcore_debug_symbols=1'
+                   'use_sysroot=0'
+                   'use_system_expat=1'
+                   'use_system_ffmpeg=1'
+                   'use_system_flac=1'
+                   'use_system_harfbuzz=1'
+                   'use_system_jsoncpp=1'
+                   'use_system_libevent=1'
+                   'use_system_libjpeg=1'
+                   'use_system_libpng=1'
+                   'use_system_libvpx=1'
+                   'use_system_libwebp=1'
+                   'use_system_libxml=1'
+                   'use_system_libxslt=1'
+                   'use_system_re2=1'
+                   'use_system_snappy=1'
+                   'use_system_yasm=1'
+                   'use_system_zlib=1'
+                  )
+  cd vendor/chromium
+  echo "{" > chromium.gyp_env
+  echo "  'GYP_DEFINES': '${_chromium_flags[*]}'" >> chromium.gyp_env
+  echo "}" >> chromium.gyp_env
+  echo 'Extracting chromium source...'
+  tar -xJf "${srcdir}"/chromium-${_chromiumver}.tar.xz
+  mv chromium-${_chromiumver} src
+  if [ ! -e src/.version ]; then
+    echo "${_chromiumver}" > src/.version
   fi
+  cd src
+  patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r2.patch  # Use system ffmpeg
+  patch -Np1 -i ${srcdir}/minizip.patch  # Use system minizip
+  patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
+  build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
 }
 
 build() {
@@ -168,34 +162,19 @@ build() {
     _target=ia32
   fi
 
-  if [ ${_rebuildcc} -ne 0 ]; then
-    echo 'Building libchromiumcontent...'
-    cd ${srcdir}/libchromiumcontent
-    export -n CFLAGS CXXFLAGS
-    script/update --target_arch=${_target}
-    script/build --target_arch=${_target} --component=static_library
-    script/create-dist --target_arch=${_target} --component=static_library
-    # Necessary for electron build scripts
-    mkdir dist/main/shared_library
-    echo 'Stripping static libraries (saves space and linking time)...'
-    find dist/main/static_library -name *.a -exec strip --strip-debug '{}' \;
-  fi
-
-  echo 'Building electron...'
   cd ${srcdir}/electron
-  _cc=${srcdir}/libchromiumcontent/dist/main
   LDFLAGS="${LDFLAGS} -Wl,-z,noexecstack"
-  script/bootstrap.py --target_arch=${_target} \
-                      --libcc_source_path=${_cc}/src \
-                      --libcc_shared_library_path=${_cc}/shared_library \
-                      --libcc_static_library_path=${_cc}/static_library
+  script/bootstrap.py --verbose \
+                      --target_arch=${_target} \
+                      --clang_dir=/usr \
+                      --build_libchromiumcontent
   script/build.py -c Release
 }
 
 package() {
   cd ${srcdir}/electron
 
-  _cc=${srcdir}/libchromiumcontent/dist/main
+  _cc=${srcdir}/electron/vendor/brightray/vendor/libchromiumcontent/dist/main
 
   install -d -m755 ${pkgdir}/usr/share/licenses/electron
   install -m644 LICENSE "${_cc}"/LICENSES.chromium.html \
@@ -225,7 +204,7 @@ package() {
     -or -name "*.h" \
       -exec install -D -m644 '{}' "${_headers_dest}/{}" \;
   install -m644 {common,config}.gypi "${_headers_dest}"
-  cd "${srcdir}"/libchromiumcontent/dist/main/src
+  cd "${_cc}"/src
   find v8 -name "*.h" \
     -exec install -D -m644 '{}' "${_headers_dest}/deps/{}" \;
   # echo '9' > "${_headers_dest}/installVersion"

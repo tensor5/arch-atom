@@ -2,7 +2,7 @@
 
 pkgname=atom
 pkgver=1.7.3
-pkgrel=1
+pkgrel=2
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -12,11 +12,13 @@ depends=('electron'
 makedepends=('npm')
 conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
 source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
+        'deprecated-api.patch'
         'fix-atom-sh.patch'
         'fix-license-path.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
 sha256sums=('5074b59ddaca5525eb48098dee6fe63013799cbc77749add314b9e1bc894b8f4'
+            'd70c4b06631dd451f020366c834d3102cea6837c2e935e66840e0aca3654cea2'
             'ac409d709fd1090fda93b6e575cf46f866d1f9f914a48ea94eb01af3d5c02b9e'
             'bb6ac5c57196cd707a8ab61aa7f30fe2d77b5e6f02fd02ad96afb7de81702046'
             '19ba93a502ff0c9db6e197f09eda9881999e4d80c264bc40d60f96e9423dd1a9'
@@ -32,6 +34,11 @@ prepare() {
 
   # apm with system (updated) nodejs cannot 'require' modules inside asar
   sed -e "s/, 'generate-asar'//" -i build/Gruntfile.coffee
+
+  # Fix for Electron 1.0.0
+  patch -Np1 -i "${srcdir}"/deprecated-api.patch
+  sed -e 's/"settings-view": "0.235.1"/"settings-view": "0.236.0"/' \
+      -i package.json
 }
 
 build() {

@@ -1,15 +1,15 @@
 --- a/script/bootstrap.py
 +++ b/script/bootstrap.py
-@@ -40,9 +40,6 @@
-                       args.libcc_source_path, args.libcc_shared_library_path,
-                       args.libcc_static_library_path)
+@@ -62,9 +62,6 @@
+                       libcc_source_path, libcc_shared_library_path,
+                       libcc_static_library_path)
  
 -  if PLATFORM == 'linux':
 -    download_sysroot(args.target_arch)
 -
    create_chrome_version_h()
    touch_config_gypi()
-   run_update()
+   run_update(defines)
 --- a/toolchain.gypi
 +++ b/toolchain.gypi
 @@ -53,10 +53,10 @@
