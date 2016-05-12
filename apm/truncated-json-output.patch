@@ -10,3 +10,49 @@
  
    run: (options) ->
      {callback} = options
+--- a/src/upgrade.coffee
++++ b/src/upgrade.coffee
+@@ -184,7 +184,7 @@
+           pack.latestVersion = latestVersion if latestVersion
+           pack.latestSha = sha if sha
+           pack
+-        console.log JSON.stringify(packagesWithLatestVersionOrSha)
++        process.stdout.write JSON.stringify(packagesWithLatestVersionOrSha) + '\n', callback
+       else
+         console.log "Package Updates Available".cyan + " (#{updates.length})"
+         tree updates, ({pack, latestVersion, sha}) ->
+@@ -198,20 +198,19 @@
+             latestVersion = latestVersion.green
+           latestVersion = latestVersion?.green or apmInstallSource?.sha?.green
+           "#{name} #{version} -> #{latestVersion}"
++        return callback() if options.command is 'outdated'
++        return callback() if options.argv.list
++        return callback() if updates.length is 0
+ 
+-      return callback() if options.command is 'outdated'
+-      return callback() if options.argv.list
+-      return callback() if updates.length is 0
++        console.log()
++        if options.argv.confirm
++          @promptForConfirmation (error, confirmed) =>
++            return callback(error) if error?
+ 
+-      console.log()
+-      if options.argv.confirm
+-        @promptForConfirmation (error, confirmed) =>
+-          return callback(error) if error?
+-
+-          if confirmed
+-            console.log()
+-            @installUpdates(updates, callback)
+-          else
+-            callback()
+-      else
+-        @installUpdates(updates, callback)
++            if confirmed
++              console.log()
++              @installUpdates(updates, callback)
++            else
++              callback()
++        else
++          @installUpdates(updates, callback)
