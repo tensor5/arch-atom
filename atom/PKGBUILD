@@ -47,6 +47,12 @@ build() {
   export ATOM_RESOURCE_PATH="$srcdir/atom-$pkgver"
   # If unset, ~/.atom/.node-gyp/.atom/.npm is used
   export NPM_CONFIG_CACHE="${HOME}/.atom/.npm"
+
+  # Make sure NodeGit builds from source and with the correct runtime
+  export BUILD_ONLY=1
+  ELECTRON_VERSION=$(</usr/lib/electron/version)
+  export ELECTRON_VERSION=${ELECTRON_VERSION#v}
+
   apm clean
   apm install
   _packagesToDedupe=('abbrev'
