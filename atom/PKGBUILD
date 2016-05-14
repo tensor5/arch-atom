@@ -55,6 +55,12 @@ build() {
 
   apm clean
   apm install
+
+  echo 'Removing NodeGit devDependencies...'
+  cd node_modules/nodegit
+  npm prune --production
+  cd ../..
+
   _packagesToDedupe=('abbrev'
                      'amdefine'
                      'atom-space-pen-views'
