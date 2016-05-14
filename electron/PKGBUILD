@@ -1,8 +1,8 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=49.0.2623.75
+_chromiumver=50.0.2661.102
 pkgname=electron
-pkgver=1.0.1
+pkgver=1.1.0
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -17,7 +17,7 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'git+https://github.com/electron/brightray.git'
         'breakpad::git+https://github.com/electron/chromium-breakpad.git'
         'git+https://github.com/electron/crashpad.git'
-        'git+https://github.com/svn2github/gyp.git'
+        'git+https://github.com/electron/gyp.git'
         "git+https://github.com/electron/libchromiumcontent.git"
         'native_mate::git+https://github.com/zcbenz/native-mate.git'
         'git+https://github.com/electron/node.git'
@@ -35,7 +35,7 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'libchromiumcontent-use-system-ffmpeg.patch'
         'libchromiumcontent-use-system-tools.patch'
         'unbundle-libvpx_new-fix.patch'
-        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r2.patch'
+        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r3.patch'
         'minizip.patch'
        )
 noextract=("chromium-${_chromiumver}.tar.xz")
@@ -50,19 +50,19 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '038f388d9db1aadc45e546c20bdede1ec8ce691915aa69b6dfd96d9c1e84d3e1'
+            '515154383b4ed9cf04f2f0f035e9f60137e2b62afd1aa1f2f4b73032b86533eb'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
             '5d75a54020759a249a4269d42d4ee231ee73c200bfd16cbfc82dc7bb49abcb31'
             'c002fce984fda849102d62671ed2daba521cfda2886f4276976692486b57b5e2'
-            '6566b7b35fd4adccbf48b1a024a6da6d8b2349149be0eb2374df2e3ee3a777af'
+            'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
             '8191483a1f51ee4a5dd1e7e6bb699ad52321291ef79ffed11bbf8f2b6fb89034'
             '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
-            'dc9a3c1fa99528e6dde8a85de730f8d8e0502e7c6809119564ea21bc604cda0a'
+            '68977a78fb41a549eb449dd35f94e0168d647245516397f0ecdfa7a03a147045'
             'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
             'c8cc2c5afef32dd30c67e3f0ad7b9750475a08da6bccb9f317ff46885b21472c'
             '2fb2157c854dab173a2ef9b4aa0ab5bb3c0dd077447c4719c7554eee6e0546b6'
             '6a2fd2d8ce5363a67452f6531a6b83f1e535f800286119fd9910d3b31c76c3bc'
-            'de19a06e10f6fb8a405c019b04dffa1616cd770bee6aa96adc9028fd7e3e2de1'
+            '7d3a300019dce3a9d24ee11f37d918e03f72faf6e9a8ddcc81c6091daecc31a0'
             'ae8db257191600e5d1e3d3142c8b430652047c2b3575d82696573f1649154c62'
            )
 
@@ -147,7 +147,7 @@ prepare() {
     echo "${_chromiumver}" > src/.version
   fi
   cd src
-  patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r2.patch  # Use system ffmpeg
+  patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r3.patch  # Use system ffmpeg
   patch -Np1 -i ${srcdir}/minizip.patch  # Use system minizip
   patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
   build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
