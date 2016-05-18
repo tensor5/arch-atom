@@ -2,7 +2,7 @@
 
 pkgname=nodejs-atom-package-manager
 pkgver=1.10.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
@@ -17,7 +17,7 @@ source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'use-system-nodejs.patch')
 sha256sums=('351eba2142d8d79350d3815fd0343fc7b16fd83588ba95793cb32e2e22a9d21c'
             'fa5b156dbe1a41d65d00992f489f4ba455b112ae5d1b9e28212b877249ecfaac'
-            'a043dc152e43014b040e8ef1994cee272a074b3a1d2a4661ad1f5dcd61f44340'
+            '6601f89c0515f3fce64e6de3b5d3fb4d82e7b43bb44ac6c807e8b1d8b8ea6451'
             '661a948e8143c8fec0c7264db74527613813fb4b6c79bb380dee8d240460c5c6')
 
 prepare() {
