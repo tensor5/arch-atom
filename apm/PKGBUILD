@@ -9,7 +9,7 @@ url='https://github.com/atom/apm'
 license=('MIT')
 groups=('atom')
 depends=('libgnome-keyring' 'nodejs' 'python2')
-makedepends=('npm')
+makedepends=('git' 'npm')
 options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'environment.patch'
