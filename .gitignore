@@ -2,4 +2,5 @@
 */pkg/
 */src/
 */v*.tar.gz
+*/*.log
 repository/
