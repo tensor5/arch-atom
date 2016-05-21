@@ -2,7 +2,7 @@
 
 _chromiumver=50.0.2661.102
 pkgname=electron
-pkgver=1.1.0
+pkgver=1.1.1
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -27,7 +27,6 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         "https://github.com/zcbenz/chromium-source-tarball/releases/download/${_chromiumver}/chromium-${_chromiumver}.tar.xz"
         'dont-bootstrap-libchromiumcontent.patch'
         'dont-use-sysroot.patch'
-        'use-system-clang.patch'
         'use-system-ninja.patch'
         'use-system-ffmpeg.patch'
         'brightray-use-system-ffmpeg.patch'
@@ -53,10 +52,9 @@ sha256sums=('SKIP'
             'SKIP'
             '515154383b4ed9cf04f2f0f035e9f60137e2b62afd1aa1f2f4b73032b86533eb'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
-            '5d75a54020759a249a4269d42d4ee231ee73c200bfd16cbfc82dc7bb49abcb31'
-            'c002fce984fda849102d62671ed2daba521cfda2886f4276976692486b57b5e2'
+            '25aaa517c3acf66a5641a4987ef6f7270b44990cec9822696daeadb4ee22192a'
             'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
-            '8191483a1f51ee4a5dd1e7e6bb699ad52321291ef79ffed11bbf8f2b6fb89034'
+            '314d0beb237dafe86bc5a2bd865f591503861cd272b1fca732f5f86ad96c0d89'
             '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
             '68977a78fb41a549eb449dd35f94e0168d647245516397f0ecdfa7a03a147045'
             'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
@@ -70,7 +68,6 @@ sha256sums=('SKIP'
 prepare() {
   cd ${srcdir}/electron
 
-  patch -Np1 -i ${srcdir}/use-system-clang.patch
   patch -Np1 -i ${srcdir}/use-system-ninja.patch
   patch -Np1 -i ${srcdir}/use-system-ffmpeg.patch
   patch -Np1 -i ${srcdir}/dont-use-sysroot.patch
