@@ -10,8 +10,9 @@ url='http://electron.atom.io/'
 license=('MIT' 'custom')
 depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libnotify' 'libvpx' 'libxslt'
          'minizip' 'nss' 're2' 'snappy')
-makedepends=('clang' 'git' 'harfbuzz-icu' 'jsoncpp' 'libexif' 'ninja' 'npm'
-             'python2' 'yasm')
+makedepends=('clang' 'git' 'gperf' 'harfbuzz-icu' 'jsoncpp' 'libexif'
+             'libgnome-keyring' 'libxss' 'ninja' 'npm' 'pciutils' 'python2'
+             'yasm')
 source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'git+https://github.com/boto/boto.git'
         'git+https://github.com/electron/brightray.git'
@@ -150,7 +151,7 @@ prepare() {
   patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r3.patch  # Use system ffmpeg
   patch -Np1 -i ${srcdir}/minizip.patch  # Use system minizip
   patch -Np1 -i ${srcdir}/unbundle-libvpx_new-fix.patch  # Use system libvpx
-  build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
+  python2 build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
 }
 
 build() {
