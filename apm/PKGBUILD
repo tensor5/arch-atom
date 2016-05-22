@@ -2,7 +2,7 @@
 
 pkgname=nodejs-atom-package-manager
 pkgver=1.10.0
-pkgrel=3
+pkgrel=4
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
@@ -12,21 +12,25 @@ depends=('libgnome-keyring' 'nodejs' 'python2')
 makedepends=('git' 'npm')
 options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
-        'environment.patch'
-        'truncated-json-output.patch'
-        'use-system-nodejs.patch')
+        'apm.js'
+        'truncated-json-output.patch')
 sha256sums=('351eba2142d8d79350d3815fd0343fc7b16fd83588ba95793cb32e2e22a9d21c'
-            'fa5b156dbe1a41d65d00992f489f4ba455b112ae5d1b9e28212b877249ecfaac'
-            '6601f89c0515f3fce64e6de3b5d3fb4d82e7b43bb44ac6c807e8b1d8b8ea6451'
-            '661a948e8143c8fec0c7264db74527613813fb4b6c79bb380dee8d240460c5c6')
+            'f40b8ed5e9387a9ddc657940a05271a9686d628073ed2ba8fb41114d4f6b6180'
+            '6601f89c0515f3fce64e6de3b5d3fb4d82e7b43bb44ac6c807e8b1d8b8ea6451')
 
 prepare() {
   rm -rf "${srcdir}"/apm-build
 
   cd apm-${pkgver}
 
-  patch -ENp1 -i ${srcdir}/use-system-nodejs.patch
-  patch -Np1 -i ${srcdir}/environment.patch
+  # Use custom launcher
+  rm bin/apm{,.cmd}
+  rm src/cli.coffee
+  install -m755 ${srcdir}/apm.js bin/apm
+
+  # Don't download binary Node
+  sed -e '/"install": "node .\/script\/download-node.js",/d' -i package.json
+  rm script/download-node.js
 
   # Fix for callbacks that run process.exit() before JSON output completes
   patch -Np1 -i ${srcdir}/truncated-json-output.patch
@@ -46,7 +50,6 @@ package() {
 
   cd "${pkgdir}"${_apmdir}
   install -m644 "${srcdir}"/apm-${pkgver}/README.md ./
-  rm bin/apm.cmd
 
   # Install license file
   install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
