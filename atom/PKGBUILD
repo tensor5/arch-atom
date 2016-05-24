@@ -9,7 +9,7 @@ url='https://github.com/atom/atom'
 license=('MIT' 'custom')
 depends=('electron'
          'nodejs-atom-package-manager')
-makedepends=('npm')
+makedepends=('git' 'npm')
 conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
 source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'deprecated-api.patch'
