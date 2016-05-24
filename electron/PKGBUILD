@@ -8,11 +8,11 @@ pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
-depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libnotify' 'libvpx' 'libxslt'
-         'minizip' 'nss' 're2' 'snappy')
+depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libvpx' 'libxslt' 'minizip' 'nss'
+         're2' 'snappy')
 makedepends=('clang' 'git' 'gperf' 'harfbuzz-icu' 'jsoncpp' 'libexif'
-             'libgnome-keyring' 'libxss' 'ninja' 'npm' 'pciutils' 'python2'
-             'yasm')
+             'libgnome-keyring' 'libnotify' 'libxss' 'ninja' 'npm' 'pciutils'
+             'python2' 'yasm')
 source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'git+https://github.com/boto/boto.git'
         'git+https://github.com/electron/brightray.git'
