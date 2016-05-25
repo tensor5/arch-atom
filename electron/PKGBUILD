@@ -8,9 +8,9 @@ pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
-depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libvpx' 'libxslt' 'minizip' 'nss'
+depends=('ffmpeg' 'gconf' 'gtk3' 'libevent' 'libvpx' 'libxslt' 'minizip' 'nss'
          're2' 'snappy')
-makedepends=('clang' 'git' 'gperf' 'harfbuzz-icu' 'jsoncpp' 'libexif'
+makedepends=('clang' 'git' 'gperf' 'gtk2' 'harfbuzz-icu' 'jsoncpp' 'libexif'
              'libgnome-keyring' 'libnotify' 'libxss' 'ninja' 'npm' 'pciutils'
              'python2' 'yasm')
 source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
@@ -100,6 +100,7 @@ prepare() {
   # Remove unused shared library and add extra libraries for unbundling
   sed -e "/-lcups/d" \
       -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy',/" \
+      -e 's/gtk+-2\.0/gtk+-3.0/' \
       -i brightray.gyp
 
   cd ${srcdir}/electron/vendor/brightray/vendor/gyp
@@ -116,6 +117,7 @@ prepare() {
                    'host_clang=0'
                    'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
                    'remove_webcore_debug_symbols=1'
+                   'use_gtk3=1'
                    'use_sysroot=0'
                    'use_system_expat=1'
                    'use_system_ffmpeg=1'
