@@ -2,7 +2,7 @@
 
 _chromiumver=50.0.2661.102
 pkgname=electron
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -23,7 +23,7 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'native_mate::git+https://github.com/zcbenz/native-mate.git'
         'git+https://github.com/electron/node.git'
         'git+https://github.com/kennethreitz/requests.git'
-        'google-breakpad::git+https://chromium.googlesource.com/external/google-breakpad/src.git'
+        'google-breakpad::git+https://chromium.googlesource.com/breakpad/breakpad/src'
         "https://github.com/zcbenz/chromium-source-tarball/releases/download/${_chromiumver}/chromium-${_chromiumver}.tar.xz"
         'dont-bootstrap-libchromiumcontent.patch'
         'dont-use-sysroot.patch'
