@@ -2,7 +2,7 @@
 
 pkgname=atom
 pkgver=1.7.4
-pkgrel=1
+pkgrel=2
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -12,15 +12,19 @@ depends=('electron'
 makedepends=('git' 'npm')
 conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
 source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
+        'beforeunload.patch'
         'deprecated-api.patch'
         'fix-atom-sh.patch'
         'fix-license-path.patch'
+        'run-as-node.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
 sha256sums=('6ef3bb4c2fea85a7d1c7665fef8aac4e353c8f8da5e2878fea3aecf5437383d4'
+            'e92e23bbf839bec6611b2ac76c1f5bba35b476983b0faa9b310288e2956247a2'
             'd70c4b06631dd451f020366c834d3102cea6837c2e935e66840e0aca3654cea2'
             'ac409d709fd1090fda93b6e575cf46f866d1f9f914a48ea94eb01af3d5c02b9e'
             'bb6ac5c57196cd707a8ab61aa7f30fe2d77b5e6f02fd02ad96afb7de81702046'
+            'e0872fab5f7b6b108dfef3e8879c08be417955082571a10152d03ccce296d2f7'
             '19ba93a502ff0c9db6e197f09eda9881999e4d80c264bc40d60f96e9423dd1a9'
             'dd052d5d757701082a47bce1b752074f1d5148ef0f94eade0b00118154848c6a')
 
@@ -39,6 +43,10 @@ prepare() {
   patch -Np1 -i "${srcdir}"/deprecated-api.patch
   sed -e 's/"settings-view": "0.235.1"/"settings-view": "0.236.0"/' \
       -i package.json
+
+  # Fix for Electron 1.2.0
+  patch -Np1 -i "${srcdir}"/beforeunload.patch
+  patch -Np1 -i "${srcdir}"/run-as-node.patch
 }
 
 build() {
