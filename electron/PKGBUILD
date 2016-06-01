@@ -34,9 +34,9 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'libchromiumcontent-static-library-only.patch'
         'libchromiumcontent-use-system-ffmpeg.patch'
         'libchromiumcontent-use-system-tools.patch'
-        'chromium-PNGImageDecoder.patch'
-        'https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-system-ffmpeg-r3.patch'
-        'minizip.patch'
+        'chromium-use-system-ffmpeg.patch'
+        'chromium-use-system-libpng.patch'
+        'chromium-use-system-minizip.patch'
        )
 noextract=("chromium-${_chromiumver}.tar.xz")
 sha256sums=('SKIP'
@@ -60,8 +60,8 @@ sha256sums=('SKIP'
             'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
             '121cc5cf6875a8ff8f6e8cece36b7cc70e934c4134c3132b7c9f2da130fe9998'
             '2fb2157c854dab173a2ef9b4aa0ab5bb3c0dd077447c4719c7554eee6e0546b6'
+            '7b6bd301996f0c5f37a90d73786be55c01877b2caefe1146d5f75ad6b1d95ab3'
             'caaa63eabcfdced965638b3353448fabda9bc4e6d898d8ec278ecac31502ded1'
-            '7d3a300019dce3a9d24ee11f37d918e03f72faf6e9a8ddcc81c6091daecc31a0'
             'ae8db257191600e5d1e3d3142c8b430652047c2b3575d82696573f1649154c62'
            )
 
@@ -145,9 +145,9 @@ prepare() {
     echo "${_chromiumver}" > src/.version
   fi
   cd src
-  patch -Np1 -i ${srcdir}/chromium-PNGImageDecoder.patch  # Use system libpng
-  patch -Np1 -i ${srcdir}/chromium-system-ffmpeg-r3.patch  # Use system ffmpeg
-  patch -Np1 -i ${srcdir}/minizip.patch  # Use system minizip
+  patch -Np1 -i ${srcdir}/chromium-use-system-ffmpeg.patch
+  patch -Np1 -i ${srcdir}/chromium-use-system-libpng.patch
+  patch -Np1 -i ${srcdir}/chromium-use-system-minizip.patch
   python2 build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
 }
 
