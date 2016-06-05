@@ -12,11 +12,9 @@ depends=('libgnome-keyring' 'nodejs' 'python2')
 makedepends=('git' 'npm')
 options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
-        'apm.js'
-        'truncated-json-output.patch')
+        'apm.js')
 sha256sums=('351eba2142d8d79350d3815fd0343fc7b16fd83588ba95793cb32e2e22a9d21c'
-            'f40b8ed5e9387a9ddc657940a05271a9686d628073ed2ba8fb41114d4f6b6180'
-            '6601f89c0515f3fce64e6de3b5d3fb4d82e7b43bb44ac6c807e8b1d8b8ea6451')
+            '0eb50358109c7acb4f750ce278323c1d5b86baea5841d5166cf4342a3edf2898')
 
 prepare() {
   rm -rf "${srcdir}"/apm-build
@@ -31,9 +29,6 @@ prepare() {
   # Don't download binary Node
   sed -e '/"install": "node .\/script\/download-node.js",/d' -i package.json
   rm script/download-node.js
-
-  # Fix for callbacks that run process.exit() before JSON output completes
-  patch -Np1 -i ${srcdir}/truncated-json-output.patch
 }
 
 build() {
