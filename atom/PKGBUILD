@@ -21,7 +21,7 @@ source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'use-system-electron.patch')
 sha256sums=('6ef3bb4c2fea85a7d1c7665fef8aac4e353c8f8da5e2878fea3aecf5437383d4'
             'e92e23bbf839bec6611b2ac76c1f5bba35b476983b0faa9b310288e2956247a2'
-            'd70c4b06631dd451f020366c834d3102cea6837c2e935e66840e0aca3654cea2'
+            '6fca91b3e80248a96fc4b6b0228602d4dd68ef851cb059a97a7379e72e53b432'
             'ac409d709fd1090fda93b6e575cf46f866d1f9f914a48ea94eb01af3d5c02b9e'
             'bb6ac5c57196cd707a8ab61aa7f30fe2d77b5e6f02fd02ad96afb7de81702046'
             'e0872fab5f7b6b108dfef3e8879c08be417955082571a10152d03ccce296d2f7'
