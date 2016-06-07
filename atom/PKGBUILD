@@ -2,7 +2,7 @@
 
 pkgname=atom
 pkgver=1.8.0
-pkgrel=1
+pkgrel=2
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -17,6 +17,7 @@ source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'fix-atom-sh.patch'
         'fix-license-path.patch'
         'run-as-node.patch'
+        'tree-view.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
 sha256sums=('2950820b2c7ab658135e9cb7c003ff2074ec0a38ac3b324d85cc20bcb237e61f'
@@ -25,6 +26,7 @@ sha256sums=('2950820b2c7ab658135e9cb7c003ff2074ec0a38ac3b324d85cc20bcb237e61f'
             'ac409d709fd1090fda93b6e575cf46f866d1f9f914a48ea94eb01af3d5c02b9e'
             '061493b9e53722e194d688a7db9e26d7fbb9a1e2cb86284aae4d7dc61e425400'
             'e0872fab5f7b6b108dfef3e8879c08be417955082571a10152d03ccce296d2f7'
+            'b96739978479fe205601882d0bd9498502f8c40e934ca12f9c183e19832f99e7'
             '19ba93a502ff0c9db6e197f09eda9881999e4d80c264bc40d60f96e9423dd1a9'
             '064c7b70db071cd639355677fe1132875c8f82b32439c2a369159376bf98dbaf')
 
@@ -67,6 +69,11 @@ build() {
   echo 'Removing NodeGit devDependencies...'
   cd node_modules/nodegit
   npm prune --production
+  cd ../..
+
+  # Fix for Node 6
+  cd node_modules/tree-view
+  patch -Np1 -i ${srcdir}/tree-view.patch
   cd ../..
 
   _packagesToDedupe=('abbrev'
