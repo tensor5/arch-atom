@@ -1,8 +1,8 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=51.0.2704.63
+_chromiumver=51.0.2704.84
 pkgname=electron
-pkgver=1.2.1
+pkgver=1.2.2
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
@@ -50,7 +50,7 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '906a36043f7c2cdb8024139cdcf87729f438ddf05af065ab2c0efedb9d7a95ad'
+            'ce1ba2164fa026d3a615249d8412d0bd1d184b1be7827bd2835bc1c953a48d94'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
             '25aaa517c3acf66a5641a4987ef6f7270b44990cec9822696daeadb4ee22192a'
             'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
@@ -107,7 +107,6 @@ prepare() {
   patch -Np1 -i ${srcdir}/gyp-no-rpath.patch
 
   cd ${srcdir}/electron/vendor/brightray/vendor/libchromiumcontent
-  git checkout 8f2a0aa0a9dd107e4d574cc9d552781c55c86bab  # Fix missing Bluetooth headers
   git submodule update --init vendor/python-patch
   patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
   patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-ffmpeg.patch
