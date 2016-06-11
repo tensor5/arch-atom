@@ -1,8 +1,8 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=nodejs-atom-package-manager
-pkgver=1.10.0
-pkgrel=4
+pkgver=1.11.1
+pkgrel=1
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
@@ -12,9 +12,13 @@ depends=('libgnome-keyring' 'nodejs' 'python2')
 makedepends=('git' 'npm')
 options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
-        'apm.js')
-sha256sums=('351eba2142d8d79350d3815fd0343fc7b16fd83588ba95793cb32e2e22a9d21c'
-            '0eb50358109c7acb4f750ce278323c1d5b86baea5841d5166cf4342a3edf2898')
+        'apm.js'
+        'scripts.patch')
+sha256sums=('ed76e114cee75dd432c67433cb594afee865ed53fccc2475707306afd1a0f42e'
+            'd0652c6d654b1dc88d7cd30a35173b644bc0c89270ecfa5c3c14512feee9b5fe'
+            '0f0d94033714254753431d6299672c87a491d3d2bc75f8adff1e40dde3b106ec')
+
+_apmdir='/usr/lib/node_modules/atom-package-manager'
 
 prepare() {
   rm -rf "${srcdir}"/apm-build
@@ -22,13 +26,13 @@ prepare() {
   cd apm-${pkgver}
 
   # Use custom launcher
-  rm bin/apm{,.cmd}
+  rm bin/apm{,.cmd} bin/npm{,.cmd}
   rm src/cli.coffee
   install -m755 ${srcdir}/apm.js bin/apm
 
   # Don't download binary Node
-  sed -e '/"install": "node .\/script\/download-node.js",/d' -i package.json
-  rm script/download-node.js
+  patch -Np1 -i ${srcdir}/scripts.patch
+  rm BUNDLED_NODE_VERSION script/*
 }
 
 build() {
@@ -36,12 +40,13 @@ build() {
 
   npm install --only=dev
   npm install --user root -g --prefix="${srcdir}"/apm-build/usr
+
+  cd "${srcdir}/apm-build${_apmdir}"
+  npm dedupe
 }
 
 package() {
   cp -r "${srcdir}"/apm-build/usr "${pkgdir}"
-
-  _apmdir='/usr/lib/node_modules/atom-package-manager'
 
   cd "${pkgdir}"${_apmdir}
   install -m644 "${srcdir}"/apm-${pkgver}/README.md ./
