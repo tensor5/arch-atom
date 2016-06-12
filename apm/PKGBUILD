@@ -1,7 +1,7 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=nodejs-atom-package-manager
-pkgver=1.11.1
+pkgver=1.11.2
 pkgrel=1
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
@@ -14,7 +14,7 @@ options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
         'scripts.patch')
-sha256sums=('ed76e114cee75dd432c67433cb594afee865ed53fccc2475707306afd1a0f42e'
+sha256sums=('74e1b00768ace89cb590ac1548ed74bb847fcd5bee2b766e5884cc017801b21b'
             'd0652c6d654b1dc88d7cd30a35173b644bc0c89270ecfa5c3c14512feee9b5fe'
             '0f0d94033714254753431d6299672c87a491d3d2bc75f8adff1e40dde3b106ec')
 
