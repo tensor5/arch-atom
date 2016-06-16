@@ -13,10 +13,10 @@ makedepends=('git' 'npm')
 options=(!emptydirs)
 source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
-        'scripts.patch')
+        'no-scripts.patch')
 sha256sums=('74e1b00768ace89cb590ac1548ed74bb847fcd5bee2b766e5884cc017801b21b'
             'd0652c6d654b1dc88d7cd30a35173b644bc0c89270ecfa5c3c14512feee9b5fe'
-            '0f0d94033714254753431d6299672c87a491d3d2bc75f8adff1e40dde3b106ec')
+            '75365e0a9d0ddb36aa97e8a8b729f7bd229481bef1f324f98db3baf4f7746a90')
 
 _apmdir='/usr/lib/node_modules/atom-package-manager'
 
@@ -31,14 +31,15 @@ prepare() {
   install -m755 ${srcdir}/apm.js bin/apm
 
   # Don't download binary Node
-  patch -Np1 -i ${srcdir}/scripts.patch
+  patch -Np1 -i ${srcdir}/no-scripts.patch
   rm BUNDLED_NODE_VERSION script/*
 }
 
 build() {
   cd apm-${pkgver}
 
-  npm install --only=dev
+  npm install coffee-script@1.8.0
+  node_modules/.bin/coffee -c --no-header -o lib src/*.coffee
   npm install --user root -g --prefix="${srcdir}"/apm-build/usr
 
   cd "${srcdir}/apm-build${_apmdir}"

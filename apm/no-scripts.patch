@@ -1,15 +1,16 @@
 --- a/package.json
 +++ b/package.json
-@@ -15,11 +15,7 @@
+@@ -14,13 +14,6 @@
+   "bin": {
      "apm": "./bin/apm"
    },
-   "scripts": {
+-  "scripts": {
 -    "build": "node script/check-version.js && grunt",
 -    "prepublish": "grunt prepublish",
 -    "install": "node script/postinstall.js",
 -    "test": "node script/check-version.js && grunt test",
 -    "check-version": "node version.js"
-+    "prepublish": "grunt prepublish"
-   },
+-  },
    "dependencies": {
      "asar-require": "0.2.0",
+     "async": "~0.2.8",
