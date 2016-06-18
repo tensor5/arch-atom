@@ -3,13 +3,13 @@
 _chromiumver=51.0.2704.84
 pkgname=electron
 pkgver=1.2.2
-pkgrel=2
+pkgrel=3
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
 depends=('ffmpeg' 'gconf' 'gtk2' 'libevent' 'libvpx' 'libxslt' 'libxss'
-         'minizip' 'nss' 're2' 'snappy')
+         'minizip' 'nss' 'protobuf' 're2' 'snappy')
 makedepends=('clang' 'git' 'gperf' 'harfbuzz-icu' 'jsoncpp' 'libexif'
              'libgnome-keyring' 'libnotify' 'ninja' 'npm' 'pciutils' 'python2'
              'yasm')
@@ -104,7 +104,7 @@ prepare() {
   done
   git submodule update
   # Add extra libraries for unbundling
-  sed -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy', '-latomic',/" \
+  sed -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng protobuf vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy', '-latomic',/" \
       -i brightray.gyp
 
   cd ${srcdir}/electron/vendor/brightray/vendor/gyp
@@ -134,6 +134,7 @@ prepare() {
                    'use_system_libwebp=1'
                    'use_system_libxml=1'
                    'use_system_libxslt=1'
+                   'use_system_protobuf=1'
                    'use_system_re2=1'
                    'use_system_snappy=1'
                    'use_system_yasm=1'
