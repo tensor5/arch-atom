@@ -2,7 +2,7 @@
 
 pkgname=atom
 pkgver=1.8.0
-pkgrel=2
+pkgrel=3
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -23,7 +23,7 @@ source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
 sha256sums=('2950820b2c7ab658135e9cb7c003ff2074ec0a38ac3b324d85cc20bcb237e61f'
             'e92e23bbf839bec6611b2ac76c1f5bba35b476983b0faa9b310288e2956247a2'
             '6fca91b3e80248a96fc4b6b0228602d4dd68ef851cb059a97a7379e72e53b432'
-            'ac409d709fd1090fda93b6e575cf46f866d1f9f914a48ea94eb01af3d5c02b9e'
+            'd3eb239f53feb3181fb4d57d2db391d7b31ce2188c5bd5b79d9ed3133351cd90'
             '061493b9e53722e194d688a7db9e26d7fbb9a1e2cb86284aae4d7dc61e425400'
             'e0872fab5f7b6b108dfef3e8879c08be417955082571a10152d03ccce296d2f7'
             'b96739978479fe205601882d0bd9498502f8c40e934ca12f9c183e19832f99e7'
@@ -116,7 +116,7 @@ package() {
   install -d -m 755 "${pkgdir}/usr/share/applications"
   sed -e "s|<%= appName %>|Atom|" \
       -e "s/<%= description %>/${pkgdesc}/" \
-      -e "s|<%= installDir %>/share/<%= appFileName %>/atom|/usr/lib/electron/electron --app=/usr/lib/atom|" \
+      -e "s|<%= installDir %>/share/<%= appFileName %>/atom|electron --app=/usr/lib/atom|" \
       -e "s|<%= iconPath %>|/usr/lib/atom/resources/atom.png|" \
       resources/linux/atom.desktop.in > "${pkgdir}/usr/share/applications/atom.desktop"
 
