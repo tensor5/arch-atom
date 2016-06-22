@@ -64,7 +64,8 @@ build() {
   export ELECTRON_VERSION=${ELECTRON_VERSION#v}
 
   apm clean
-  apm install
+  # -Wl,-z,noexecstack to make sure nodegit.node does not have executable stack
+  LDFLAGS="${LDFLAGS} -Wl,-z,noexecstack" apm install
 
   echo 'Removing NodeGit devDependencies...'
   cd node_modules/nodegit
