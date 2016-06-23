@@ -1,9 +1,9 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=51.0.2704.84
+_chromiumver=51.0.2704.103
 pkgname=electron
-pkgver=1.2.2
-pkgrel=3
+pkgver=1.2.4
+pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
@@ -31,7 +31,6 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'use-system-ninja.patch'
         'use-system-ffmpeg.patch'
         'brightray-dont-update-submodules.patch'
-        'brightray-no-whole-archive.patch'
         'brightray-use-system-ffmpeg.patch'
         'gyp-no-rpath.patch'
         'libchromiumcontent-static-library-only.patch'
@@ -54,15 +53,14 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            'ce1ba2164fa026d3a615249d8412d0bd1d184b1be7827bd2835bc1c953a48d94'
+            'afa1b1b583837a3562459dbfbbedba443558c9aa4d5860f54f9ec022ea59b2f5'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
             '7fd0fc72a14b2a08ce0f258a750a9d181386b9277312f2ed5446c29b8ec4e282'
             '25aaa517c3acf66a5641a4987ef6f7270b44990cec9822696daeadb4ee22192a'
             'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
             '314d0beb237dafe86bc5a2bd865f591503861cd272b1fca732f5f86ad96c0d89'
             '3bf045dc4ac1cb32491c4a20de313c3056824e75308f97b9e869fd5a2a166480'
-            'eb29e4e041c46b489d0d887dbac7065b88727617a67bee80252630f32ff4b093'
-            '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
+            'f59960b43f36399ea16622c7c494780aa14e9c21fedd8b07db210c6993fcc543'
             '68977a78fb41a549eb449dd35f94e0168d647245516397f0ecdfa7a03a147045'
             'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
             '71d8f4a762f1ce273446ced052621de32bc095358800f78b21e722e25e071c74'
@@ -99,7 +97,6 @@ prepare() {
   cd ${srcdir}/electron/vendor/brightray
   patch -Np1 -i ${srcdir}/brightray-dont-update-submodules.patch
   patch -Np1 -i ${srcdir}/brightray-use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/brightray-no-whole-archive.patch
   for m in libchromiumcontent gyp; do
     git submodule init vendor/${m}
     git config submodule.vendor/${m}.url ${srcdir}/${m}

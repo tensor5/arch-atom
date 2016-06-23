@@ -1,6 +1,6 @@
 --- a/brightray.gyp
 +++ b/brightray.gyp
-@@ -101,8 +101,6 @@
+@@ -100,8 +100,6 @@
              }, {
                'link_settings': {
                  'libraries': [
