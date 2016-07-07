@@ -30,16 +30,7 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'dont-use-sysroot.patch'
         'use-system-ninja.patch'
         'use-system-ffmpeg.patch'
-        'brightray-dont-update-submodules.patch'
-        'brightray-no-whole-archive.patch'
-        'brightray-use-system-ffmpeg.patch'
-        'gyp-no-rpath.patch'
-        'libchromiumcontent-static-library-only.patch'
-        'libchromiumcontent-use-system-ffmpeg.patch'
-        'libchromiumcontent-use-system-tools.patch'
         'chromium-use-system-ffmpeg.patch'
-        'chromium-use-system-libpng.patch'
-        'chromium-use-system-minizip.patch'
         'electron.sh'
        )
 noextract=("chromium-${_chromiumver}.tar.xz")
@@ -60,18 +51,8 @@ sha256sums=('SKIP'
             '25aaa517c3acf66a5641a4987ef6f7270b44990cec9822696daeadb4ee22192a'
             'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
             '314d0beb237dafe86bc5a2bd865f591503861cd272b1fca732f5f86ad96c0d89'
-            '3bf045dc4ac1cb32491c4a20de313c3056824e75308f97b9e869fd5a2a166480'
-            'eb29e4e041c46b489d0d887dbac7065b88727617a67bee80252630f32ff4b093'
-            '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
-            '68977a78fb41a549eb449dd35f94e0168d647245516397f0ecdfa7a03a147045'
-            'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
-            '71d8f4a762f1ce273446ced052621de32bc095358800f78b21e722e25e071c74'
-            '2fb2157c854dab173a2ef9b4aa0ab5bb3c0dd077447c4719c7554eee6e0546b6'
-            '7b6bd301996f0c5f37a90d73786be55c01877b2caefe1146d5f75ad6b1d95ab3'
-            'caaa63eabcfdced965638b3353448fabda9bc4e6d898d8ec278ecac31502ded1'
-            'ae8db257191600e5d1e3d3142c8b430652047c2b3575d82696573f1649154c62'
-            '7d49a587633c1a4a773f2a1510a12250de6b3c7a8fbb7928489c49f7ec6997ca'
-           )
+            'b4bc899c0b7e8fd4397ca466357bc8867d9d491ab62a8a9d76f5043240fda1ed'
+            '7d49a587633c1a4a773f2a1510a12250de6b3c7a8fbb7928489c49f7ec6997ca')
 
 prepare() {
   cd ${srcdir}/electron
@@ -97,9 +78,6 @@ prepare() {
   git submodule update
 
   cd ${srcdir}/electron/vendor/brightray
-  patch -Np1 -i ${srcdir}/brightray-dont-update-submodules.patch
-  patch -Np1 -i ${srcdir}/brightray-use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/brightray-no-whole-archive.patch
   for m in libchromiumcontent gyp; do
     git submodule init vendor/${m}
     git config submodule.vendor/${m}.url ${srcdir}/${m}
@@ -110,16 +88,8 @@ prepare() {
       -e 's/gtk+-2\.0/gtk+-3.0/' \
       -i brightray.gyp
 
-  cd ${srcdir}/electron/vendor/brightray/vendor/gyp
-  # Remove a useless $ORIGIN/lib/ rpath from the electron binary
-  patch -Np1 -i ${srcdir}/gyp-no-rpath.patch
-
   cd ${srcdir}/electron/vendor/brightray/vendor/libchromiumcontent
   git submodule update --init vendor/python-patch
-  patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
-  patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-ffmpeg.patch
-  patch -Np1 -i "${srcdir}"/libchromiumcontent-static-library-only.patch
-  rm patches/third_party/ffmpeg/ffmpeg.patch  # Use system ffmpeg
   _chromium_flags=('fastbuild=2'
                    'host_clang=0'
                    'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
@@ -150,14 +120,14 @@ prepare() {
   echo "}" >> chromium.gyp_env
   echo 'Extracting chromium source...'
   tar -xJf "${srcdir}"/chromium-${_chromiumver}.tar.xz
+  if [[ -d chromium-${_chromiumver} ]]; then
+    rm -rf src/chromium-${_chromiumver}
+  fi
   mv chromium-${_chromiumver} src
   if [ ! -e src/.version ]; then
     echo "${_chromiumver}" > src/.version
   fi
   cd src
-  patch -Np1 -i ${srcdir}/chromium-use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/chromium-use-system-libpng.patch
-  patch -Np1 -i ${srcdir}/chromium-use-system-minizip.patch
   python2 build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
 }
 
