@@ -28,6 +28,7 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'dont-bootstrap-libchromiumcontent.patch'
         'dont-update-submodules.patch'
         'dont-use-sysroot.patch'
+        'allow-i686.patch'
         'use-system-libraries-in-node.patch'
         'use-system-ninja.patch'
         'use-system-ffmpeg.patch'
@@ -59,6 +60,7 @@ sha256sums=('SKIP'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
             '7fd0fc72a14b2a08ce0f258a750a9d181386b9277312f2ed5446c29b8ec4e282'
             '25aaa517c3acf66a5641a4987ef6f7270b44990cec9822696daeadb4ee22192a'
+            'c209475c16b506d8d888a54c8564718cf9775f450d1867e19e86a03d99a119be'
             'fc1346be60f2e95881922973c26e9bd92c8fb88afecb17bf3cf321b729dcce1f'
             'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
             '314d0beb237dafe86bc5a2bd865f591503861cd272b1fca732f5f86ad96c0d89'
@@ -84,6 +86,7 @@ prepare() {
   patch -Np1 -i ${srcdir}/dont-update-submodules.patch
   patch -Np1 -i ${srcdir}/dont-use-sysroot.patch
   patch -Np1 -i ${srcdir}/dont-bootstrap-libchromiumcontent.patch
+  patch -Np1 -i ${srcdir}/allow-i686.patch
 
   mkdir -p ${srcdir}/python2-path
   ln -sf /usr/bin/python2 "${srcdir}/python2-path/python"
