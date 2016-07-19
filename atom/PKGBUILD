@@ -122,7 +122,7 @@ package() {
 
   install -D -m 755 out/Atom/resources/new-app/atom.sh "${pkgdir}/usr/bin/atom"
 
-  install -D -m 755 out/Atom/resources/LICENSE.md \
+  install -D -m 644 out/Atom/resources/LICENSE.md \
           "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.md"
 
   # Remove useless stuff
