@@ -78,37 +78,37 @@ sha256sums=('SKIP'
            )
 
 prepare() {
-  cd ${srcdir}/electron
+  cd "${srcdir}"/electron
 
-  patch -Np1 -i ${srcdir}/use-system-libraries-in-node.patch
-  patch -Np1 -i ${srcdir}/use-system-ninja.patch
-  patch -Np1 -i ${srcdir}/use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/dont-update-submodules.patch
-  patch -Np1 -i ${srcdir}/dont-use-sysroot.patch
-  patch -Np1 -i ${srcdir}/dont-bootstrap-libchromiumcontent.patch
-  patch -Np1 -i ${srcdir}/allow-i686.patch
+  patch -Np1 -i "${srcdir}"/use-system-libraries-in-node.patch
+  patch -Np1 -i "${srcdir}"/use-system-ninja.patch
+  patch -Np1 -i "${srcdir}"/use-system-ffmpeg.patch
+  patch -Np1 -i "${srcdir}"/dont-update-submodules.patch
+  patch -Np1 -i "${srcdir}"/dont-use-sysroot.patch
+  patch -Np1 -i "${srcdir}"/dont-bootstrap-libchromiumcontent.patch
+  patch -Np1 -i "${srcdir}"/allow-i686.patch
 
-  mkdir -p ${srcdir}/python2-path
+  mkdir -p "${srcdir}"/python2-path
   ln -sf /usr/bin/python2 "${srcdir}/python2-path/python"
 
   for m in boto breakpad brightray crashpad native_mate node requests; do
     git submodule init vendor/${m}
-    git config submodule.vendor/${m}.url ${srcdir}/${m}
+    git config submodule.vendor/${m}.url "${srcdir}/${m}"
   done
   git submodule update
 
-  cd ${srcdir}/electron/vendor/breakpad
+  cd "${srcdir}"/electron/vendor/breakpad
   git submodule init src
-  git config submodule.src.url ${srcdir}/google-breakpad
+  git config submodule.src.url "${srcdir}"/google-breakpad
   git submodule update
 
-  cd ${srcdir}/electron/vendor/brightray
-  patch -Np1 -i ${srcdir}/brightray-dont-update-submodules.patch
-  patch -Np1 -i ${srcdir}/brightray-use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/brightray-no-whole-archive.patch
+  cd "${srcdir}"/electron/vendor/brightray
+  patch -Np1 -i "${srcdir}"/brightray-dont-update-submodules.patch
+  patch -Np1 -i "${srcdir}"/brightray-use-system-ffmpeg.patch
+  patch -Np1 -i "${srcdir}"/brightray-no-whole-archive.patch
   for m in libchromiumcontent gyp; do
     git submodule init vendor/${m}
-    git config submodule.vendor/${m}.url ${srcdir}/${m}
+    git config submodule.vendor/${m}.url "${srcdir}/${m}"
   done
   git submodule update
   # Add extra libraries for unbundling
@@ -116,11 +116,11 @@ prepare() {
       -e 's/gtk+-2\.0/gtk+-3.0/' \
       -i brightray.gyp
 
-  cd ${srcdir}/electron/vendor/brightray/vendor/gyp
+  cd "${srcdir}"/electron/vendor/brightray/vendor/gyp
   # Remove a useless $ORIGIN/lib/ rpath from the electron binary
-  patch -Np1 -i ${srcdir}/gyp-no-rpath.patch
+  patch -Np1 -i "${srcdir}"/gyp-no-rpath.patch
 
-  cd ${srcdir}/electron/vendor/brightray/vendor/libchromiumcontent
+  cd "${srcdir}"/electron/vendor/brightray/vendor/libchromiumcontent
   git submodule update --init vendor/python-patch
   patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-tools.patch
   patch -Np1 -i "${srcdir}"/libchromiumcontent-use-system-ffmpeg.patch
@@ -161,9 +161,9 @@ prepare() {
     echo "${_chromiumver}" > src/.version
   fi
   cd src
-  patch -Np1 -i ${srcdir}/chromium-use-system-ffmpeg.patch
-  patch -Np1 -i ${srcdir}/chromium-use-system-libpng.patch
-  patch -Np1 -i ${srcdir}/chromium-use-system-minizip.patch
+  patch -Np1 -i "${srcdir}"/chromium-use-system-ffmpeg.patch
+  patch -Np1 -i "${srcdir}"/chromium-use-system-libpng.patch
+  patch -Np1 -i "${srcdir}"/chromium-use-system-minizip.patch
   python2 build/linux/unbundle/replace_gyp_files.py "${_chromium_flags[@]/#/-D}"
 }
 
@@ -176,7 +176,7 @@ build() {
     _target=ia32
   fi
 
-  cd ${srcdir}/electron
+  cd "${srcdir}"/electron
   LDFLAGS="${LDFLAGS} -Wl,-z,noexecstack"
   script/bootstrap.py --verbose \
                       --target_arch=${_target} \
@@ -186,26 +186,26 @@ build() {
 }
 
 package() {
-  cd ${srcdir}/electron
+  cd "${srcdir}"/electron
 
-  _cc=${srcdir}/electron/vendor/brightray/vendor/libchromiumcontent/dist/main
+  _cc="${srcdir}"/electron/vendor/brightray/vendor/libchromiumcontent/dist/main
 
-  install -d -m755 ${pkgdir}/usr/share/licenses/electron
+  install -d -m755 "${pkgdir}"/usr/share/licenses/electron
   install -m644 LICENSE "${_cc}"/LICENSES.chromium.html \
           ${pkgdir}/usr/share/licenses/electron
 
   cd out/R
-  install -d -m755 ${pkgdir}/usr/lib/electron
+  install -d -m755 "${pkgdir}"/usr/lib/electron
   install -m644 content_shell.pak icudtl.dat natives_blob.bin snapshot_blob.bin \
-          ${pkgdir}/usr/lib/electron
-  install -m755 electron ${pkgdir}/usr/lib/electron
-  install -D -m755 ${srcdir}/electron.sh ${pkgdir}/usr/bin/electron
+          "${pkgdir}"/usr/lib/electron
+  install -m755 electron "${pkgdir}"/usr/lib/electron
+  install -D -m755 "${srcdir}"/electron.sh "${pkgdir}"/usr/bin/electron
   # namcap warning: Referenced library 'libnode.so' is an uninstalled dependency
   # Fixable by moving libnode.so to /usr/lib
-  install -m644 libnode.so ${pkgdir}/usr/lib/electron
-  cp -r locales resources ${pkgdir}/usr/lib/electron
+  install -m644 libnode.so "${pkgdir}"/usr/lib/electron
+  cp -r locales resources "${pkgdir}"/usr/lib/electron
 
-  echo -n "v${pkgver}" > ${pkgdir}/usr/lib/electron/version
+  echo -n "v${pkgver}" > "${pkgdir}"/usr/lib/electron/version
 
   # Install Node headers
   _headers_dest="${pkgdir}/usr/lib/electron/node"

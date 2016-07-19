@@ -74,7 +74,7 @@ build() {
 
   # Fix for Node 6
   cd node_modules/tree-view
-  patch -Np1 -i ${srcdir}/tree-view.patch
+  patch -Np1 -i "${srcdir}"/tree-view.patch
   cd ../..
 
   _packagesToDedupe=('abbrev'
