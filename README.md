@@ -7,6 +7,13 @@ available by enabling `[atom]` repository in `/etc/pacman.conf`:
 Server = http://noaxiom.org/$repo/$arch
 ```
 
+You should also add the repo's key to your trusted keys:
+
+```sh
+sudo pacman-key -r B0544167
+sudo pacman-key --lsign-key B0544167
+```
+
 Check the Arch [wiki][atom-wiki] for more information.
 
 # Build method
