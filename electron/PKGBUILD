@@ -3,7 +3,7 @@
 _chromiumver=51.0.2704.106
 pkgname=electron
 pkgver=1.2.7
-pkgrel=2
+pkgrel=3
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
