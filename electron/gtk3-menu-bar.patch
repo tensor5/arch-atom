@@ -9,7 +9,7 @@
  #endif
  
  namespace atom {
-@@ -30,18 +28,58 @@ const char kViewClassName[] = "ElectronMenuBar";
+@@ -30,18 +28,68 @@ const char kViewClassName[] = "ElectronMenuBar";
  const SkColor kDefaultColor = SkColorSetARGB(255, 233, 233, 233);
  
  #if defined(USE_X11)
@@ -34,6 +34,8 @@
 -
 +  GtkWidget* menu_item = gtk_menu_item_new();
 +  GtkStyleContext* window_style_ctx = gtk_widget_get_style_context(window);
++  GtkStyleContext* menu_bar_style_ctx =
++    gtk_widget_get_style_context(menu_bar);
 +  GtkStyleContext* menu_item_style_ctx =
 +    gtk_widget_get_style_context(menu_item);
 +  GdkRGBA normal_color;
@@ -41,16 +43,24 @@
 +  GdkRGBA prelight_color;
 +  GdkRGBA* background_color_ptr;
 +
-+  gtk_style_context_get(window_style_ctx,
++  gtk_container_add(GTK_CONTAINER(window), menu_bar);
++  gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), menu_item);
++
++  gtk_style_context_get(menu_bar_style_ctx,
 +                        GTK_STATE_FLAG_NORMAL,
 +                        "background-color",
 +                        &background_color_ptr,
 +                        NULL);
++
++  if (background_color_ptr->alpha == 0.0)
++    gtk_style_context_get(window_style_ctx,
++                          GTK_STATE_FLAG_NORMAL,
++                          "background-color",
++                          &background_color_ptr,
++                          NULL);
++
 +  *background = GdkRGBAToSkColor(*background_color_ptr);
 +  gdk_rgba_free(background_color_ptr);
-+
-+  gtk_container_add(GTK_CONTAINER(window), menu_bar);
-+  gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), menu_item);
 +
 +  gtk_style_context_get_color(menu_item_style_ctx,
 +                              GTK_STATE_FLAG_NORMAL,
