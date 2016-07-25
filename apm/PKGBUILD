@@ -11,7 +11,7 @@ groups=('atom')
 depends=('libgnome-keyring' 'nodejs' 'python2')
 makedepends=('git' 'npm')
 options=(!emptydirs)
-source=("https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
         'no-scripts.patch')
 sha256sums=('d582c1ce98e2f701f38d67303255cba4f911cfcc6f3642f1faaa0ea58e553338'

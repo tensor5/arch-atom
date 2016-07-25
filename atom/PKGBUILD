@@ -11,7 +11,7 @@ depends=('electron'
          'nodejs-atom-package-manager')
 makedepends=('git' 'npm')
 conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
-source=("https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'beforeunload.patch'
         'deprecated-api.patch'
         'fix-atom-sh.patch'
