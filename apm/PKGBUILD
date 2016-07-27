@@ -1,15 +1,17 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-pkgname=nodejs-atom-package-manager
+pkgname=apm
 pkgver=1.12.3
 pkgrel=1
 pkgdesc='Atom package manager'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
 license=('MIT')
-groups=('atom')
 depends=('libgnome-keyring' 'npm' 'python2')
 makedepends=('coffee-script' 'git')
+provides=('nodejs-atom-package-manager')
+conflicts=('nodejs-atom-package-manager')
+replaces=('nodejs-atom-package-manager')
 options=(!emptydirs)
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
