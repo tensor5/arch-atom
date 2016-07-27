@@ -9,7 +9,7 @@ url='https://github.com/atom/apm'
 license=('MIT')
 groups=('atom')
 depends=('libgnome-keyring' 'nodejs' 'python2')
-makedepends=('git' 'npm')
+makedepends=('coffee-script' 'git' 'npm')
 options=(!emptydirs)
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
@@ -38,8 +38,7 @@ prepare() {
 build() {
   cd apm-${pkgver}
 
-  npm install coffee-script@1.8.0
-  node_modules/.bin/coffee -c --no-header -o lib src/*.coffee
+  coffee -c --no-header -o lib src/*.coffee
   npm install --user root -g --prefix="${srcdir}"/apm-build/usr
 
   cd "${srcdir}/apm-build${_apmdir}"
