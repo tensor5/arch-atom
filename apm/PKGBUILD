@@ -8,15 +8,17 @@ arch=('i686' 'x86_64')
 url='https://github.com/atom/apm'
 license=('MIT')
 groups=('atom')
-depends=('libgnome-keyring' 'nodejs' 'python2')
-makedepends=('coffee-script' 'git' 'npm')
+depends=('libgnome-keyring' 'npm' 'python2')
+makedepends=('coffee-script' 'git')
 options=(!emptydirs)
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
-        'no-scripts.patch')
+        'no-scripts.patch'
+        'use-system-node-gyp.patch')
 sha256sums=('d582c1ce98e2f701f38d67303255cba4f911cfcc6f3642f1faaa0ea58e553338'
-            'd0652c6d654b1dc88d7cd30a35173b644bc0c89270ecfa5c3c14512feee9b5fe'
-            '75365e0a9d0ddb36aa97e8a8b729f7bd229481bef1f324f98db3baf4f7746a90')
+            '0eb50358109c7acb4f750ce278323c1d5b86baea5841d5166cf4342a3edf2898'
+            '75365e0a9d0ddb36aa97e8a8b729f7bd229481bef1f324f98db3baf4f7746a90'
+            'ce5cc7f84a1dad9ee773bc8c20ea6498463013cadf81cf0494150b24992dd93e')
 
 _apmdir='/usr/lib/node_modules/atom-package-manager'
 
@@ -33,6 +35,9 @@ prepare() {
   # Don't download binary Node
   patch -Np1 -i "${srcdir}"/no-scripts.patch
   rm BUNDLED_NODE_VERSION script/*
+
+  # Use system node-gyp
+  patch -Np1 -i ../use-system-node-gyp.patch
 }
 
 build() {
@@ -42,6 +47,10 @@ build() {
   npm install --user root -g --prefix="${srcdir}"/apm-build/usr
 
   cd "${srcdir}/apm-build${_apmdir}"
+
+  # Use system npm
+  npm uninstall npm
+
   npm dedupe
 }
 
@@ -62,7 +71,7 @@ package() {
                  -e "s|${srcdir}/apm-${pkgver}|${_apmdir}|" \
                  -i '{}' \;
 
-  # Remove useless stuff and use python2
+  # Remove useless stuff
   find "${pkgdir}"/usr/lib \
       -name ".*" -prune -exec rm -r '{}' \; \
       -or -name "*.a" -exec rm '{}' \; \
@@ -86,9 +95,5 @@ package() {
       -or -name "obj.target" -prune -exec rm -r '{}' \; \
       -or -name "samples" -prune -exec rm -r '{}' \; \
       -or -name "test" -prune -exec rm -r '{}' \; \
-      -or -name "tests" -prune -exec rm -r '{}' \; \
-      -or -name "*.py" -exec \
-          sed -e 's|^#!/usr/bin/env python$|#!/usr/bin/python2|' -i '{}' \; \
-      -or -path "*/gyp/gyp" \
-          -exec sed -e 's|exec python |exec python2 |' -i '{}' \;
+      -or -name "tests" -prune -exec rm -r '{}' \;
 }
