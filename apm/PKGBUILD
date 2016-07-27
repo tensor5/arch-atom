@@ -83,7 +83,7 @@ package() {
       -or -path "*/keytar/src" -prune -exec rm -r '{}' \; \
       -or -path "*/oniguruma/binding.gyp" -exec rm '{}' \; \
       -or -path "*/oniguruma/src" -prune -exec rm -r '{}' \; \
-      -or -name "*.yml" -exec rm '{}' \; \
+      -or -name "appveyor.yml" -exec rm '{}' \; \
       -or -name "benchmark" -prune -exec rm -r '{}' \; \
       -or -name "binding.Makefile" -exec rm '{}' \; \
       -or -name "config.gypi" -exec rm '{}' \; \
