@@ -1,15 +1,15 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
-_chromiumver=51.0.2704.106
+_chromiumver=52.0.2743.82
 pkgname=electron
-pkgver=1.2.8
+pkgver=1.3.0
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
 depends=('c-ares' 'ffmpeg' 'gconf' 'gtk3' 'http-parser' 'libevent' 'libvpx'
-         'libxslt' 'libxss' 'minizip' 'nss' 'protobuf' 're2' 'snappy')
+         'libxslt' 'libxss' 'minizip' 'nss' 're2' 'snappy')
 makedepends=('clang' 'git' 'gperf' 'gtk2' 'harfbuzz-icu' 'jsoncpp' 'libexif'
              'libgnome-keyring' 'libnotify' 'ninja' 'npm' 'pciutils' 'python2'
              'yasm')
@@ -57,23 +57,23 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '0471952a78bc47d742f85ee2243882e2b7b981217dfea9260aa5670f5fef8e47'
+            '7c03da5e66623b47689c7075cb8a3299484122fd45deadfd5f089eb6c399f35e'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
             '7fd0fc72a14b2a08ce0f258a750a9d181386b9277312f2ed5446c29b8ec4e282'
             '25aaa517c3acf66a5641a4987ef6f7270b44990cec9822696daeadb4ee22192a'
             'c209475c16b506d8d888a54c8564718cf9775f450d1867e19e86a03d99a119be'
             '4834c8573587c133d02a21cdfeffd9ef3ad7d71360ba548f33e100448e2cb821'
-            'fc1346be60f2e95881922973c26e9bd92c8fb88afecb17bf3cf321b729dcce1f'
+            '69f10a18b2f2403377cfa6e36750205a0804c5b7d49b44d44d05cd370fb186ab'
             'dc3286a1947240ab6ec562263af0b3c9971da2a4ab45970e3e664563e877280f'
-            '314d0beb237dafe86bc5a2bd865f591503861cd272b1fca732f5f86ad96c0d89'
+            'fd237dada74a67a5652e0a4661d1e7f3a53a3bfa010b963579346f5456e9f190'
             '3bf045dc4ac1cb32491c4a20de313c3056824e75308f97b9e869fd5a2a166480'
-            'eb29e4e041c46b489d0d887dbac7065b88727617a67bee80252630f32ff4b093'
-            '333af456be29ce44e0d9373b2d0aed4c3ed6a2548d9bde04bc7bf022fdc9cb79'
+            'dc4a8937d8683ada2e008fb2b63cd02d58415629c220966c6a3a1cddcbe60e75'
+            'ee9c26d0248cbac908ec9120d26ec5694febfdf93413044552da892cf6a3b073'
             '68977a78fb41a549eb449dd35f94e0168d647245516397f0ecdfa7a03a147045'
-            'b2a168b4ee8bc1c0b9b48a61a573c7e2cc193ad5a3f4fee845cd3207d2033d3d'
+            '7bc4cc154643712556f2cfbcba72bc08d032a52a39bccc61c91a7b230fe9a80e'
             '71d8f4a762f1ce273446ced052621de32bc095358800f78b21e722e25e071c74'
             '2fb2157c854dab173a2ef9b4aa0ab5bb3c0dd077447c4719c7554eee6e0546b6'
-            '7b6bd301996f0c5f37a90d73786be55c01877b2caefe1146d5f75ad6b1d95ab3'
+            'f890e35922a5e049491259354c221c8a51baff84092ef566ea590495e615445f'
             'caaa63eabcfdced965638b3353448fabda9bc4e6d898d8ec278ecac31502ded1'
             'ae8db257191600e5d1e3d3142c8b430652047c2b3575d82696573f1649154c62'
             '7d49a587633c1a4a773f2a1510a12250de6b3c7a8fbb7928489c49f7ec6997ca'
@@ -115,7 +115,7 @@ prepare() {
   done
   git submodule update
   # Add extra libraries for unbundling
-  sed -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng protobuf vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy', '-latomic',/" \
+  sed -e "s/'-lexpat',/'-lexpat', '<\!@(pkg-config --libs-only-l libavcodec libavformat libavutil libevent flac harfbuzz-icu jsoncpp minizip libpng vpx libwebpdemux libxml-2.0 libxslt)', '-ljpeg', '-lre2', '-lsnappy', '-latomic',/" \
       -e 's/gtk+-2\.0/gtk+-3.0/' \
       -i brightray.gyp
 
@@ -147,13 +147,11 @@ prepare() {
                    'use_system_libwebp=1'
                    'use_system_libxml=1'
                    'use_system_libxslt=1'
-                   'use_system_protobuf=1'
                    'use_system_re2=1'
                    'use_system_snappy=1'
                    'use_system_yasm=1'
                    'use_system_zlib=1'
                   )
-  cd vendor/chromium
   echo "{" > chromium.gyp_env
   echo "  'GYP_DEFINES': '${_chromium_flags[*]}'" >> chromium.gyp_env
   echo "}" >> chromium.gyp_env

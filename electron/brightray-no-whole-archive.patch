@@ -1,6 +1,6 @@
 --- a/brightray.gyp
 +++ b/brightray.gyp
-@@ -36,14 +36,13 @@
+@@ -37,14 +37,13 @@
        'conditions': [
          # Link with libraries of libchromiumcontent.
          ['OS=="linux" and libchromiumcontent_component==0', {

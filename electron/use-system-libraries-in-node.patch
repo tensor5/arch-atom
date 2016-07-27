@@ -1,9 +1,9 @@
 --- a/common.gypi
 +++ b/common.gypi
-@@ -19,12 +19,12 @@
-     'node_target_type': 'shared_library',
+@@ -22,12 +22,12 @@
      'node_install_npm': 'false',
      'node_prefix': '',
+     'node_shared': 'true',
 -    'node_shared_cares': 'false',
 -    'node_shared_http_parser': 'false',
 +    'node_shared_cares': 'true',
@@ -17,7 +17,7 @@
      'node_tag': '',
      'node_use_dtrace': 'false',
      'node_use_etw': 'false',
-@@ -101,16 +101,6 @@
+@@ -107,16 +107,6 @@
          'conditions': [
            ['OS=="linux"', {
              'cflags': [
@@ -34,7 +34,7 @@
                # Required when building as shared library.
                '-fPIC',
              ],
-@@ -187,6 +177,13 @@
+@@ -195,6 +185,13 @@
              ],
            }],
            ['OS=="linux" and libchromiumcontent_component==0', {
