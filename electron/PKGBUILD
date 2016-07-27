@@ -8,7 +8,7 @@ pkgdesc='Build cross platform desktop apps with web technologies'
 arch=('i686' 'x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
-depends=('c-ares' 'ffmpeg' 'gconf' 'gtk3' 'http-parser' 'libevent' 'libvpx'
+depends=('c-ares' 'ffmpeg' 'gtk3' 'http-parser' 'libevent' 'libvpx'
          'libxslt' 'libxss' 'minizip' 'nss' 'protobuf' 're2' 'snappy')
 makedepends=('clang' 'git' 'gperf' 'gtk2' 'harfbuzz-icu' 'jsoncpp' 'libexif'
              'libgnome-keyring' 'libnotify' 'ninja' 'npm' 'pciutils' 'python2'
@@ -133,6 +133,7 @@ prepare() {
                    'host_clang=0'
                    'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
                    'remove_webcore_debug_symbols=1'
+                   'use_gconf=0'
                    'use_gtk3=1'
                    'use_sysroot=0'
                    'use_system_expat=1'
