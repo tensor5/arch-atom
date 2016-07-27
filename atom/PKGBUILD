@@ -7,8 +7,8 @@ pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
 license=('MIT' 'custom')
-depends=('electron'
-         'nodejs-atom-package-manager')
+depends=('apm'
+         'electron')
 makedepends=('git' 'npm')
 conflicts=('atom-editor' 'atom-editor-bin' 'atom-editor-git')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
