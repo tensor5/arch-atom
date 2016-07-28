@@ -12,5 +12,5 @@
 -    "check-version": "node version.js"
 -  },
    "dependencies": {
-     "asar-require": "0.2.0",
+     "asar-require": "0.2.1",
      "async": "~0.2.8",
