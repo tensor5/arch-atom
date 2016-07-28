@@ -16,11 +16,11 @@ options=(!emptydirs)
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/apm/archive/v${pkgver}.tar.gz"
         'apm.js'
         'no-scripts.patch'
-        'use-system-node-gyp.patch')
+        'use-system-npm.patch')
 sha256sums=('d582c1ce98e2f701f38d67303255cba4f911cfcc6f3642f1faaa0ea58e553338'
             '0eb50358109c7acb4f750ce278323c1d5b86baea5841d5166cf4342a3edf2898'
             '75365e0a9d0ddb36aa97e8a8b729f7bd229481bef1f324f98db3baf4f7746a90'
-            'ce5cc7f84a1dad9ee773bc8c20ea6498463013cadf81cf0494150b24992dd93e')
+            'c6bf548e5850d9699b4bf662eee33aca628c62ab9c92f9216e8fe33b0012990c')
 
 _apmdir='/usr/lib/node_modules/atom-package-manager'
 
@@ -38,8 +38,8 @@ prepare() {
   patch -Np1 -i "${srcdir}"/no-scripts.patch
   rm BUNDLED_NODE_VERSION script/*
 
-  # Use system node-gyp
-  patch -Np1 -i ../use-system-node-gyp.patch
+  # Use system npm
+  patch -Np1 -i "${srcdir}"/use-system-npm.patch
 }
 
 build() {
@@ -47,13 +47,6 @@ build() {
 
   coffee -c --no-header -o lib src/*.coffee
   npm install --user root -g --prefix="${srcdir}"/apm-build/usr
-
-  cd "${srcdir}/apm-build${_apmdir}"
-
-  # Use system npm
-  npm uninstall npm
-
-  npm dedupe
 }
 
 package() {
