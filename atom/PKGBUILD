@@ -16,6 +16,8 @@ source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pk
         'deprecated-api.patch'
         'fix-atom-sh.patch'
         'fix-license-path.patch'
+        'fix-marker-index.patch'
+        'fix-oniguruma.patch'
         'run-as-node.patch'
         'stop-using-nodegit.patch'
         'tree-view.patch'
@@ -26,6 +28,8 @@ sha256sums=('2950820b2c7ab658135e9cb7c003ff2074ec0a38ac3b324d85cc20bcb237e61f'
             '6fca91b3e80248a96fc4b6b0228602d4dd68ef851cb059a97a7379e72e53b432'
             'd3eb239f53feb3181fb4d57d2db391d7b31ce2188c5bd5b79d9ed3133351cd90'
             '061493b9e53722e194d688a7db9e26d7fbb9a1e2cb86284aae4d7dc61e425400'
+            '2569702bee0508ee38a181f28bc99d6844725de206362a010705d84da09735c3'
+            'c0ae6c64802bc20219bc9142bd6e62e65853044b4a678d3f7ec72dcb61d22274'
             'e0872fab5f7b6b108dfef3e8879c08be417955082571a10152d03ccce296d2f7'
             '351fec847a3f6cd9b62f7930c09bb3eef46da2b350a3c733a766d11ff6126612'
             'b96739978479fe205601882d0bd9498502f8c40e934ca12f9c183e19832f99e7'
@@ -66,15 +70,8 @@ build() {
   export ATOM_RESOURCE_PATH="$srcdir/atom-$pkgver"
   # If unset, ~/.atom/.node-gyp/.atom/.npm is used
   export NPM_CONFIG_CACHE="${HOME}/.atom/.npm"
-
-  # Make sure NodeGit builds from source and with the correct runtime
-  export BUILD_ONLY=1
-  ELECTRON_VERSION=$(</usr/lib/electron/version)
-  export ELECTRON_VERSION=${ELECTRON_VERSION#v}
-
   apm clean
-  # -Wl,-z,noexecstack to make sure nodegit.node does not have executable stack
-  LDFLAGS="${LDFLAGS} -Wl,-z,noexecstack" apm install
+  apm install
 
   # Fix for Node 6
   cd node_modules/tree-view
@@ -82,14 +79,14 @@ build() {
   cd ../..
 
   # Fix for Electron 1.3.0
-  #
-  # Fails to load onig_scanner.node native modules; fixed with upgrade.
-  cd node_modules/first-mate
-  sed -e '/oniguruma/s/5\.1\.2/6\.1\.0/' -i package.json
-  npm_config_disturl=https://atom.io/download/atom-shell \
-  npm_config_target=${ELECTRON_VERSION#v} \
-  npm install oniguruma
-  cd ../..
+  _node_gyp="node-gyp rebuild --target=$(</usr/lib/electron/version) --dist-url=https://atom.io/download/atom-shell"
+  cd node_modules/marker-index
+  patch -Np1 -i "${srcdir}"/fix-marker-index.patch
+  ${_node_gyp}
+  cd ../oniguruma
+  patch -Np1 -i "${srcdir}"/fix-oniguruma.patch
+  ${_node_gyp}
+  cd ../../
 
   _packagesToDedupe=('abbrev'
                      'amdefine'
