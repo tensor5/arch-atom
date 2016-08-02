@@ -1,8 +1,8 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=atom
-pkgver=1.8.0
-pkgrel=4
+pkgver=1.9.0
+pkgrel=1
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -19,22 +19,20 @@ source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pk
         'fix-marker-index.patch'
         'fix-oniguruma.patch'
         'run-as-node.patch'
-        'stop-using-nodegit.patch'
         'tree-view.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
-sha256sums=('2950820b2c7ab658135e9cb7c003ff2074ec0a38ac3b324d85cc20bcb237e61f'
+sha256sums=('9b08a40d850b3434c341a3ea63526dbbfc9a974cc6b1032deae8459a5d5d5e45'
             'e92e23bbf839bec6611b2ac76c1f5bba35b476983b0faa9b310288e2956247a2'
             '6fca91b3e80248a96fc4b6b0228602d4dd68ef851cb059a97a7379e72e53b432'
             'd3eb239f53feb3181fb4d57d2db391d7b31ce2188c5bd5b79d9ed3133351cd90'
-            '061493b9e53722e194d688a7db9e26d7fbb9a1e2cb86284aae4d7dc61e425400'
+            'bd78052d4361fda165823dcd957ddd80eb7ab79a535f71d8344a5d5a55625427'
             '2569702bee0508ee38a181f28bc99d6844725de206362a010705d84da09735c3'
             'c0ae6c64802bc20219bc9142bd6e62e65853044b4a678d3f7ec72dcb61d22274'
-            'e0872fab5f7b6b108dfef3e8879c08be417955082571a10152d03ccce296d2f7'
-            '351fec847a3f6cd9b62f7930c09bb3eef46da2b350a3c733a766d11ff6126612'
-            'b96739978479fe205601882d0bd9498502f8c40e934ca12f9c183e19832f99e7'
-            '19ba93a502ff0c9db6e197f09eda9881999e4d80c264bc40d60f96e9423dd1a9'
-            '064c7b70db071cd639355677fe1132875c8f82b32439c2a369159376bf98dbaf')
+            '1533581eeede375924a3431fed7e6641a156f765bf252590d73da4259f07343f'
+            '109af01ceae45615994f2ac08292c44db339bf7ef89369b077e04fcfc35aa3dd'
+            '7771ff6ddf06bedeb37ff47bf98f685cc67585e6f831d2add9a31078383a6fbe'
+            '23d9d2976ad23f17d7c6e7e09c5de5aceae72a5577f811723bf8c7885b319c05')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -47,21 +45,9 @@ prepare() {
   # apm with system (updated) nodejs cannot 'require' modules inside asar
   sed -e "s/, 'generate-asar'//" -i build/Gruntfile.coffee
 
-  # Fix for Electron 1.0.0
-  patch -Np1 -i "${srcdir}"/deprecated-api.patch
-  sed -e 's/"settings-view": "0.235.1"/"settings-view": "0.236.0"/' \
-      -i package.json
-
   # Fix for Electron 1.2.0
   patch -Np1 -i "${srcdir}"/beforeunload.patch
   patch -Np1 -i "${srcdir}"/run-as-node.patch
-
-  # Fix for Electron 1.3.0
-  #
-  # NodeGit fails to compile with Electron 1.3.0
-  # (https://github.com/nodegit/nodegit/issues/1089)
-  # so we disable it, as done here https://github.com/atom/atom/pull/12167
-  patch -Np1 -i "${srcdir}"/stop-using-nodegit.patch
 }
 
 build() {
