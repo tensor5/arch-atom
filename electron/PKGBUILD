@@ -198,6 +198,11 @@ package() {
   install -m644 LICENSE "${_cc}"/LICENSES.chromium.html \
           "${pkgdir}"/usr/share/licenses/electron
 
+  for _license in vendor/*/LICENSE; do
+    install -D -m644 $_license \
+      "${pkgdir}"/usr/share/licenses/electron/LICENSE-$(basename $(dirname $_license))
+  done
+
   cd out/R
   install -d -m755 "${pkgdir}"/usr/lib/electron
   install -m644 content_shell.pak icudtl.dat natives_blob.bin snapshot_blob.bin \
