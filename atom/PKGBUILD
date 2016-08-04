@@ -2,7 +2,7 @@
 
 pkgname=atom
 pkgver=1.9.0
-pkgrel=1
+pkgrel=2
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
 url='https://github.com/atom/atom'
@@ -16,6 +16,8 @@ source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pk
         'deprecated-api.patch'
         'fix-atom-sh.patch'
         'fix-license-path.patch'
+        'fix-marker-index.patch'
+        'fix-oniguruma.patch'
         'run-as-node.patch'
         'tree-view.patch'
         'use-system-apm.patch'
@@ -25,6 +27,8 @@ sha256sums=('9b08a40d850b3434c341a3ea63526dbbfc9a974cc6b1032deae8459a5d5d5e45'
             '6fca91b3e80248a96fc4b6b0228602d4dd68ef851cb059a97a7379e72e53b432'
             'd3eb239f53feb3181fb4d57d2db391d7b31ce2188c5bd5b79d9ed3133351cd90'
             'bd78052d4361fda165823dcd957ddd80eb7ab79a535f71d8344a5d5a55625427'
+            '2569702bee0508ee38a181f28bc99d6844725de206362a010705d84da09735c3'
+            'c0ae6c64802bc20219bc9142bd6e62e65853044b4a678d3f7ec72dcb61d22274'
             '1533581eeede375924a3431fed7e6641a156f765bf252590d73da4259f07343f'
             '109af01ceae45615994f2ac08292c44db339bf7ef89369b077e04fcfc35aa3dd'
             '7771ff6ddf06bedeb37ff47bf98f685cc67585e6f831d2add9a31078383a6fbe'
@@ -59,6 +63,16 @@ build() {
   cd node_modules/tree-view
   patch -Np1 -i "${srcdir}"/tree-view.patch
   cd ../..
+
+  # Fix for Electron 1.3
+  _node_gyp="node-gyp rebuild --target=$(</usr/lib/electron/version) --dist-url=https://atom.io/download/atom-shell"
+  cd node_modules/marker-index
+  patch -Np1 -i "${srcdir}"/fix-marker-index.patch
+  ${_node_gyp}
+  cd ../oniguruma
+  patch -Np1 -i "${srcdir}"/fix-oniguruma.patch
+  ${_node_gyp}
+  cd ../../
 
   _packagesToDedupe=('abbrev'
                      'amdefine'

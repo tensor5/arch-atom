@@ -9,7 +9,7 @@
 -
    create_chrome_version_h()
    touch_config_gypi()
-   run_update(defines, args.disable_clang, args.clang_dir)
+   run_update(defines, args.msvs)
 --- a/toolchain.gypi
 +++ b/toolchain.gypi
 @@ -53,10 +53,10 @@

@@ -1,6 +1,6 @@
 --- a/script/create-dist
 +++ b/script/create-dist
-@@ -85,7 +85,6 @@
+@@ -89,7 +89,6 @@
      'libsystem_wrappers.a',
      'libcdm_renderer.a',
      'libsecurity_state.a',
@@ -8,7 +8,7 @@
    ],
    'win32': [
      'chromedriver.exe',
-@@ -292,7 +291,6 @@
+@@ -298,7 +297,6 @@
        copy_generated_sources(target_arch, component, output_dir)
        copy_locales(target_arch, component, output_dir)
  

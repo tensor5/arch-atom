@@ -21,7 +21,7 @@
  #include <libavutil/imgutils.h>
 --- a/media/filters/ffmpeg_demuxer.cc
 +++ b/media/filters/ffmpeg_demuxer.cc
-@@ -1092,24 +1092,6 @@
+@@ -1101,24 +1101,6 @@
    // If no estimate is found, the stream entry will be kInfiniteDuration().
    std::vector<base::TimeDelta> start_time_estimates(format_context->nb_streams,
                                                      kInfiniteDuration());
@@ -44,25 +44,5 @@
 -    }
 -  }
  
-   scoped_ptr<MediaTracks> media_tracks(new MediaTracks());
+   std::unique_ptr<MediaTracks> media_tracks(new MediaTracks());
    AVStream* audio_stream = NULL;
---- a/build/linux/unbundle/ffmpeg.gyp
-+++ b/build/linux/unbundle/ffmpeg.gyp
-@@ -41,6 +41,17 @@
-           'USE_SYSTEM_FFMPEG',
-         ],
-       },
-+      'variables': {
-+        'headers_root_path': '.',
-+        'header_filenames': [
-+          'libavcodec/avcodec.h',
-+          'libavformat/avformat.h',
-+          'libavutil/imgutils.h',
-+        ],
-+      },
-+      'includes': [
-+        '../../build/shim_headers.gypi',
-+      ],
-       'link_settings': {
-         'ldflags': [
-           '<!@(pkg-config --libs-only-L --libs-only-other libavcodec libavformat libavutil)',
