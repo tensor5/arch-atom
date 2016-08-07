@@ -138,6 +138,8 @@ prepare() {
   rm patches/third_party/ffmpeg/ffmpeg.patch  # Use system ffmpeg
   _chromium_flags=('fastbuild=2'
                    'host_clang=0'
+                   'linux_use_bundled_binutils=0'
+                   'linux_use_bundled_gold=0'
                    'release_extra_cflags="-O3 -Wno-error"'  # -Wno-error required by bundled ICU
                    'remove_webcore_debug_symbols=1'
                    'use_gconf=0'
