@@ -1,7 +1,7 @@
 # Maintainer: Nicola Squartini <tensor5@gmail.com>
 
 pkgname=atom
-pkgver=1.9.4
+pkgver=1.9.6
 pkgrel=1
 pkgdesc='A hackable text editor for the 21st Century'
 arch=('i686' 'x86_64')
@@ -22,7 +22,7 @@ source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pk
         'tree-view.patch'
         'use-system-apm.patch'
         'use-system-electron.patch')
-sha256sums=('3cef23b12b874b999283cd1f4d533af84a3035e12c524048c580972783bfd8a1'
+sha256sums=('4c27d2344e28d4156eff8a88ed0b66884a77f7e4b2cbaf316c6451b24fd7ff97'
             'e92e23bbf839bec6611b2ac76c1f5bba35b476983b0faa9b310288e2956247a2'
             '6fca91b3e80248a96fc4b6b0228602d4dd68ef851cb059a97a7379e72e53b432'
             'd3eb239f53feb3181fb4d57d2db391d7b31ce2188c5bd5b79d9ed3133351cd90'
