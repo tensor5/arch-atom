@@ -11,6 +11,7 @@ license=('MIT' 'custom')
 depends=('apm' 'electron' 'libxkbfile')
 makedepends=('git' 'npm')
 optdepends=('ctags: symbol indexing support')
+replaces=('atom-editor')
 options=(!emptydirs)
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/atom/atom/archive/v${pkgver}.tar.gz"
         'fix-atom-sh.patch'
