@@ -229,6 +229,11 @@ package() {
   install -m644 vendor/brightray/vendor/libchromiumcontent/src/LICENSE \
           "${pkgdir}"/usr/share/licenses/electron/LICENSE-chromium
 
+  for _license in vendor/*/LICENSE; do
+    install -D -m644 $_license \
+      "${pkgdir}"/usr/share/licenses/electron/LICENSE-$(basename $(dirname $_license))
+  done
+
   cd out/R
   install -d -m755 "${pkgdir}"/usr/lib/electron
   install -m644 blink_image_resources_200_percent.pak \
