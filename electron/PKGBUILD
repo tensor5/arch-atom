@@ -6,7 +6,7 @@ pkgname=electron
 pkgver=1.6.15
 pkgrel=1
 pkgdesc='Build cross platform desktop apps with web technologies'
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url='http://electron.atom.io/'
 license=('MIT' 'custom')
 depends=('c-ares' 'ffmpeg' 'gtk3' 'http-parser' 'libevent' 'libvpx' 'libxslt'
@@ -36,7 +36,6 @@ source=("git+https://github.com/electron/electron.git#tag=v${pkgver}"
         'dont-bootstrap-libchromiumcontent.patch'
         'dont-update-submodules.patch'
         'dont-use-sysroot.patch'
-        'allow-i686.patch'
         'gtk3-menu-bar.patch'
         'gtk3-message-box.patch'
         'gtk3-warnings.patch'
@@ -79,7 +78,6 @@ sha256sums=('SKIP'
             '14dbd1eecb7034d9e19e1f0c61b0a36ed3b9c610db008ff2a6da2a540ade1221'
             '2a2bc09a40415fd0d57cc8815a158bf32eb4cc2add3b655dddf568c7dc795ff3'
             '182a2eeb784630e6aa3378a54c5709629658eac8e146764008cb2f2214cd5427'
-            'c209475c16b506d8d888a54c8564718cf9775f450d1867e19e86a03d99a119be'
             'e18b81d584684657bf0a1af000d22f3c0963250c77ec9d72a4c877eabf032cd2'
             '473f740b2b73cad131a38bd56bfa84e7905378187ef4586ea5eff18342b2ba8a'
             'ea2942e980328ffb989abb32e5aa0991363178b9c455b931ab726e1c3039ec96'
@@ -135,7 +133,6 @@ prepare() {
   patch -Np1 -i "${srcdir}"/dont-update-submodules.patch
   patch -Np1 -i "${srcdir}"/dont-use-sysroot.patch
   patch -Np1 -i "${srcdir}"/dont-bootstrap-libchromiumcontent.patch
-  patch -Np1 -i "${srcdir}"/allow-i686.patch
 
   mkdir -p "${srcdir}"/python2-path
   ln -sf /usr/bin/python2 "${srcdir}/python2-path/python"
@@ -210,12 +207,6 @@ prepare() {
 build() {
   export PATH="${srcdir}/python2-path:${PATH}"
 
-  if [ "${CARCH}" == 'x86_64' ]; then
-    _target=x64
-  else
-    _target=ia32
-  fi
-
   # Build GN
   cd "${srcdir}/chromium-${_chromiumver}"
   gn_flags=(
@@ -233,7 +224,6 @@ build() {
   cd "${srcdir}"/electron
   LDFLAGS="${LDFLAGS} -Wl,-z,noexecstack"
   script/bootstrap.py --verbose \
-                      --target_arch=${_target} \
                       --clang_dir=/usr \
                       --build_libchromiumcontent
   script/build.py -c Release
