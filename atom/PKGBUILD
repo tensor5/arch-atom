@@ -45,6 +45,9 @@ prepare() {
   patch -Np1 -i "${srcdir}"/fix-node8.patch
   patch -Np1 -i "${srcdir}"/fix-restart.patch
 
+  # Upstream ea1ff8d45448679390058be185ee0d36f823872e
+  sed -e 's/"archive-view": "0.64.3"/"archive-view": "0.64.6"/' -i package.json
+
   # Workaround for Node 10
   sed -e 's|"electron-link": "0.2.0"|"electron-link": "../../electron-link"|' \
       -i script/package.json
