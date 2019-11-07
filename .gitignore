@@ -1,6 +1,7 @@
 */*.pkg.tar.*
 */pkg/
 */src/
+*/git-utils/
 */*.tar.gz
 */*.tar.gz.part
 */*.log
